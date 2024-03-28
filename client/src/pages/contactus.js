@@ -1,5 +1,5 @@
 import { useState } from "react";
-import img4 from '../pictures/img8.png'
+
 
 const Contact = () => {
     const [data, setData] = useState(
@@ -16,9 +16,7 @@ alert("Submit Details")
     }
     return ( 
         <div className="contactdiv">
-        <div className="img4">
-                <img src={img4} width={500} height={800}/>
-        </div>
+        
         <div className = 'contact'>
         <form method='post' onSubmit={handleSubmit}>
             <h1>Contact Us</h1>

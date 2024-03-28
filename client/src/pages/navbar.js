@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../pictures/logo.png";
+
 //to identufy that the user is logged in
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -16,9 +16,9 @@ const Navbar = () => {
 
   return (
     <nav className="sticky z-10 w-full top-0 bg-slate-300 shadow-xl flex p-6  justify-between items-center">
-      <div className="logo ml-7 ">
+      {/* <div className="logo ml-7 ">
         <img src={logo} width={50} height={50} />
-      </div>
+      </div> */}
 
       <div className="my-3 ">
         {user && (
