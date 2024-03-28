@@ -7,13 +7,22 @@ const GoalDetails = ({goal}) => {
     const {user} = useAuthContext();
 
     const handleClick = async () => {
-        const response = await fetch('/api/goal/' + goal._id, {
-            method: 'DELETE'
+        if (!user) {
+            return
+          }
+
+        const response = await fetch('/api/goals/' + goal._id, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+              }
         });
+
+        const json = await response.json()
     
         if (response.ok) {
             // No need to parse an empty response
-            dispatch({ type: 'DELETE_GOALS', payload: goal._id });
+            dispatch({ type: 'DELETE_GOALS', payload: json });
         } else {
             // Handle non-successful response (e.g., show an error message)
             console.error('Error deleting goal:', response.statusText);
@@ -30,7 +39,7 @@ const GoalDetails = ({goal}) => {
             <p><strong>Duration (in mins): </strong>{goal.duration}</p>
             <p><strong>Prerequisites: </strong>{goal.requirements}</p>
             {/* <p>{formatDistanceToNow(new Date(goal.createdAt), { addSuffix: true })}</p> */}
-            {/* <span className="material-symbols-outlined" onClick={handleClick}>delete</span> */}
+            <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
         </div>
         </div>
         )}

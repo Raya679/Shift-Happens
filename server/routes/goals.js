@@ -1,8 +1,8 @@
 const express = require('express')
 const {getGoal,createGoal, deleteGoal, getGoals} = require('../controllers/goalController')
-// const requireAuth = require('../middleware/requireAuth')
+const requireAuth = require('../middleware/requireAuth')
 const router = express.Router()
-// router.use(requireAuth)
+router.use(requireAuth)
 
 // require auth for all data routes
 // router.use(requireAuth)

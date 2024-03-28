@@ -14,7 +14,8 @@ const mongoose = require('mongoose')
 //     res.status(200).json(data)
 // }
 const getGoals = async (req, res) => {
-    const goals = await Goals.find({}).sort({createdAt: -1})
+    const user_id = req.user._id
+    const goals = await Goals.find({ user_id }).sort({createdAt: -1})
   
     res.status(200).json(goals)
   }
@@ -64,8 +65,9 @@ const createGoal = async (req, res) => {
     }
 
     try {
+        const user_id = req.user._id
         // const user_id = req.user._id 
-        const goal = await Goals.create({activities, duration, requirements})
+        const goal = await Goals.create({activities, duration, requirements, user_id})
         // const token = createToken(data._id)
         res.status(200).json(goal)
     }

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useGoalContext } from "../hooks/useGoalContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const GoalForm = () => {
-    const {dispatch}= useGoalContext()
+    const {dispatch}= useGoalContext();
+    const {user}=useAuthContext();
 
     const [activities, setActivities] = useState('')
     const [duration, setDuration]=useState('')
@@ -13,13 +15,19 @@ const GoalForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault() 
 
+        if (!user) {
+            setError('You must be logged in')
+            return
+          }
+
         const goal = {activities, duration, requirements}
 
-        const response = await fetch('/api/goal/add', {
+        const response = await fetch('/api/goals/add', {
             method: 'POST',
             body: JSON.stringify(goal),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             }
         })
 
@@ -38,7 +46,6 @@ const GoalForm = () => {
             setActivities('')
             setDuration('')
             setRequirements('')
-            // localStorage.setItem('goal', JSON.stringify(json))
             dispatch({type: 'CREATE_GOALS', payload: json})
         }
 
@@ -55,7 +62,8 @@ const GoalForm = () => {
             type="text"
             onChange={(e) => setActivities(e.target.value)}
             value={activities}
-            className='ml-10  border-slate-500'
+            className={emptyFields.includes('activities') ? 'error' : ''}
+            // className='ml-10  border-slate-500'
             />
             </label>
             <br></br>
@@ -64,7 +72,8 @@ const GoalForm = () => {
                 type="number"
                 onChange={(e) => setDuration(e.target.value)}
                 value={duration}
-                className='ml-10  border-slate-500'
+                className={emptyFields.includes('duration') ? 'error' : ''}
+                // className='ml-10  border-slate-500'
                 />
             </label>
             <br></br>
@@ -73,7 +82,8 @@ const GoalForm = () => {
             type="text"
             onChange={(e) => setRequirements(e.target.value)}
             value={requirements}
-            className='ml-10 border-slate-500'
+            className={emptyFields.includes('requirements') ? 'error' : ''}
+            // className='ml-10 border-slate-500'
             />
             </label>
             <br></br>
