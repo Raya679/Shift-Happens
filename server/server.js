@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
 app.use('/api/user', userRoutes)
 app.use('/api/goals', goalRoutes )
-app.use('/api', moodRoutes )
+app.use('/api/moods', moodRoutes )
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     // listen for requests
