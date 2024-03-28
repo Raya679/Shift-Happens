@@ -18,8 +18,12 @@ const moodSchema = new Schema ({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    user_id:  {
+        type: String,
+        required: true
     }
-});
+}, { timestamps: true })
 
 const Mood = mongoose.model('Mood', moodSchema);
 module.exports = Mood;

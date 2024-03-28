@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
 app.use('/api/user', userRoutes)
 app.use('/api/goals', goalRoutes )
-app.use('/api', moodRoutes )
+app.use('/api/moods', moodRoutes )
 
 app.use("/api/posts", posts);
 app.use("/api/reply", replies);

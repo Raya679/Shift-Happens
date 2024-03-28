@@ -3,15 +3,18 @@ import axios from "axios";
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { LinearScale, CategoryScale } from "chart.js";
+import { useAuthContext } from "../hooks/useAuthContext";
 Chart.register(LinearScale, CategoryScale);
 
 function Mood() {
+  const {user} = useAuthContext();
   const [moodsData, setMoodsData] = useState([]);
   const [answers, setAnswers] = useState({
     moodss: "",
     sleep: "",
     stress: "",
   });
+  const [error, setError] = useState(null);
 
   const QUESTIONS = [
     "How much would you rate your mood today on a scale of 10? (1 being the lowest and 10 the highest)",
@@ -28,29 +31,45 @@ function Mood() {
 
   const infoSubmit = async () => {
     try {
-      await axios.post("/api/moods", answers);
+      await axios.post("/api/moods/add", answers, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`
+        },
+      });
       setAnswers({
         moodss: "",
         sleep: "",
         stress: "",
       });
+      setError(null);
     } catch (error) {
       console.error("Error submitting mood:", error);
+      setError("Error submitting mood. Please try again later.");
     }
   };
 
   useEffect(() => {
     const fetchMoods = async () => {
       try {
-        const response = await axios.get("/api/moods");
-        setMoodsData(response.data);
+        
+        if (user && user.token) {
+          const response = await axios.get("/api/moods", {
+            headers: {
+              'Authorization': `Bearer ${user.token}`,
+            }
+          });
+          setMoodsData(response.data);
+        }
       } catch (error) {
         console.error("Error fetching moods:", error);
       }
     };
-
+  
     fetchMoods();
-  }, []);
+  }, [user]); 
+  
+  
 
   const moodssData = moodsData.map((mood) => mood.moodss);
   const sleepData = moodsData.map((mood) => mood.sleep);
@@ -129,10 +148,11 @@ function Mood() {
       </div>
       <div
         onClick={infoSubmit}
-        className="bg-gray-700 text-1xl font-bold mt-3 mb-9 py-2 px-4 rounded-[10px] border-4 border-gray-400 ml-auto mr-40 w-min text-white"
+        className="bg-gray-700 text-1xl font-bold mt-3 mb-9 py-2 px-4 rounded-[10px] border-4 border-gray-400 ml-auto mr-40 w-min text-white cursor-pointer"
       >
         SUBMIT
       </div>
+      {error && <div className="text-red-500 mx-20">{error}</div>}
       <div className="mx-20 my-28 bg-slate-300">
         <Line data={data} />
       </div>

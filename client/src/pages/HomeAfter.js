@@ -16,6 +16,7 @@ const HomeAfter = () => {
           {/* <h5>Your Path to Prosperity Starts Here </h5> */}
           <div className="h-full w-5/6 bg-white rounded-3xl p-10">
             <div className="h-full">
+              <a href="/moods">
               <div className="flex justify-center w-full">
                 <div className="bg-slate-100 h-1/3 w-1/3 flex justify-center p-20 rounded-2xl m-10">
                   <img src={mood}></img>
@@ -25,7 +26,7 @@ const HomeAfter = () => {
                   <p>Track your Moods, emotions and stress Levels</p>
                 </div>
               </div>
-
+              </a>
               <a href="/exercise">
                 <div className="flex justify-center w-full">
                   <div className="bg-slate-100 h-1/3 w-1/3 flex justify-center p-20 rounded-2xl m-10">

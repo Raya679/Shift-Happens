@@ -14,7 +14,6 @@ const Goals = () => {
                 headers: {'Authorization': `Bearer ${user.token}`},
             });
             const json = await response.json();
-
             if (response.ok) {
                 dispatch({ type: 'SET_GOALS', payload: json });
             }
