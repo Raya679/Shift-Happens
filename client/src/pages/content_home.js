@@ -7,29 +7,23 @@
 
 //      );
 // }
- 
+
 // export default ContentHome;
 
 import React, { useEffect, useState } from 'react';
 // import Footer from './Footer';
 import { Loader } from "@googlemaps/js-api-loader";
-import brain from '../pictures/brain.jpg'
+//import brain from '../pictures/brain.jpg'
 export default function ContentHome() {
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
         window.scrollTo(0, 0);
 
-        // const img = new Image();
-        // img.src = "../pictures/brain.jpg";
-        // img.onload = () => {
-        //     setImageDimensions({ width: img.width, height: img.height });
-        // };
-
         const loader = new Loader({
-            apiKey: 'AIzaSyD48hQw8EEsHM_r2RyF2Mlos0c_E7jYe7U', 
+            apiKey: 'AIzaSyD48hQw8EEsHM_r2RyF2Mlos0c_E7jYe7U',
             version: "weekly",
-          
+
         });
 
         loader.load().then(async () => {
@@ -37,7 +31,7 @@ export default function ContentHome() {
                 const { google } = window;
                 const pyrmont = { lat: 23.8701334, lng: 90.2713944 };
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
                         pyrmont.lat = position.coords.latitude;
                         pyrmont.lng = position.coords.longitude;
                     });
@@ -53,7 +47,7 @@ export default function ContentHome() {
                     location: pyrmont,
                     radius: 4000,
                     type: ['hospital']
-                }, function(results, status) {
+                }, function (results, status) {
                     if (status !== 'OK') {
                         console.error('PlacesService nearbySearch failed:', status);
                         return;
@@ -88,29 +82,7 @@ export default function ContentHome() {
         map.fitBounds(bounds);
     }
 
-    const div2style = {
-        width: imageDimensions.width + 80,
-        height: imageDimensions.height + 80,
-        backgroundColor: 'rgba(255, 255, 255, 0.3)',
-        padding: '20px',
-        borderRadius: '50%',
-        margin: 'auto',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    };
-
-    const divStyle = {
-        width: imageDimensions.width + 40,
-        height: imageDimensions.height + 40,
-        backgroundColor: '#E5E7EB',
-        padding: '20px',
-        borderRadius: '50%',
-        margin: 'auto',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    };
+    
 
     return (
         <>
@@ -127,12 +99,9 @@ export default function ContentHome() {
                     </div>
 
                     <div className='image ml-auto mr-32 mt-8'>
-                        <div style={div2style}>
-                            <div style={divStyle}>
-                                <img src={brain} width={50} height={50} />
-                            </div>
-                        </div>
+                        <img src="brai.png" alt="gh" className=' -mt-9 ml-16' />
                     </div>
+
                 </div>
                 <div className='feat1 flex mt-20 px-24'>
                     <div className='map bg-black w-1/2 h-96' id="map"></div>
@@ -142,10 +111,10 @@ export default function ContentHome() {
                                 Contact Professionals
                             </div>
                             <div className=' bg-neutral-500  rounded-xl text-white text-xl p-4 m-4 text-center'>
-                            <p>Rajesh Shetty</p><br />
-                            <p>Contact info: 9897654621</p>
-                            Email id : rajeshshetty@gmail.com
-                        </div>
+                                <p>Rajesh Shetty</p><br />
+                                <p>Contact info: 9897654621</p>
+                                Email id : rajeshshetty@gmail.com
+                            </div>
                         </div>
                     </div>
                 </div>
