@@ -13,6 +13,8 @@ import Goals from "./pages/getgoal";
 import Exercise from "./pages/exercise.js";
 import Footer from "./pages/footer.js";
 import Mood from "./pages/moodpage.js";
+import VideoSession from "./pages/videoSession.js";
+import RoomPage from "./pages/room.js";
 
 function App() {
   const {user} = useAuthContext();
@@ -31,6 +33,8 @@ function App() {
          <Route path="/moods" element={<GetMood/>}/>
          <Route path="/goals" element={<GetGoal/>}/>
          <Route path="/exercise" element={<GetExercise/>}/>
+         <Route path="/lvc" element={<LiveVCall/>}/>
+         <Route path="/room/:roomId" element={<LRoomPage/>}/>
          {/* <Route path="/chatbot" element={<ChatBot/>}/> */}
 
        </Routes>
@@ -47,6 +51,16 @@ function App() {
      </div>
    );
  }
+ function LRoomPage(){
+   return (
+      <>
+      <div className="goalspg h-3/4">
+         <RoomPage/>
+      </div>
+
+      </>
+   )
+}
 // function ChatBot() 
 // {
 //    return (
@@ -55,6 +69,21 @@ function App() {
 //       </div>
 //    )
 // }
+function LiveVCall(){
+   return (
+      <>
+      <div className="goalspage">
+         <Navbar/>
+         {/* <Goals/> */}
+      </div>
+
+      <div className="goalspg">
+         <VideoSession/>
+      </div>
+
+      </>
+   )
+}
 function GetMood(){
    return (
       <>
