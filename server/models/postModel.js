@@ -13,12 +13,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 5,
-    maxlength: 1024,
     required: true,
   },
   author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: true,
   },
   views: {
@@ -40,10 +38,11 @@ const postSchema = new mongoose.Schema({
 const Post = mongoose.model("Post", postSchema);
 
 function validatePost(post) {
+  console.log(post.title)
   const schema = Joi.object({
     title: Joi.string().required().min(10).max(80),
     description: Joi.string().required().min(3).max(1024),
-  });
+  })
   return schema.validate(post);
 }
 

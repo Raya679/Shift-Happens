@@ -2,8 +2,8 @@ const {Post,validatePost} = require("../models/postModel");
 const _ = require("lodash");
 
 const getPosts = async (req, res) => {
-  let all_posts = await Post.find().populate("author", "name -_id");
-  res.send(all_posts);
+   const allPosts = await Post.find().sort({time: -1})
+   res.status(200).json(allPosts)
 };
 
 const getPost = async (req, res) => {
@@ -22,16 +22,17 @@ const getPost = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
+
   const { error } = validatePost(req.body);
   const post = new Post({
     title: req.body.title,
     description: req.body.description,
-    author: req.user._id,
+    author: req.body.username,
     views: 1,
   });
   try {
     await post.save();
-    res.send("Post succesfully created.");
+    res.status(200).json(post)
   } catch (err) {
     console.log("error: ", err);
   }
@@ -40,8 +41,8 @@ const createPost = async (req, res) => {
 const likePost = async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(400).send("Post doesn't exists");
-  if (post.author == req.user._id)
-    return res.status(400).send("You can't upvote your own post");
+  // if (post.author == req.user._id)
+  //   return res.status(400).send("You can't upvote your own post");
   const upvoteArray = post.upvotes;
   const index = upvoteArray.indexOf(req.user._id);
   if (index === -1) {
@@ -55,7 +56,7 @@ const likePost = async (req, res) => {
     "author",
     "name username"
   );
-  res.send(post_new);
+  res.status(200).json(post)
 };
 
 module.exports = {getPost, getPosts, createPost, likePost}
