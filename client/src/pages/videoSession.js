@@ -14,10 +14,11 @@ const VideoSession = () => {
 
     const handleJoinRoom = useCallback(() => {
         if (inputFilled) {
-            navigate(`/room/${value}`);
+            const sharedLink = `${window.location.origin}${window.location.pathname}?roomId=${value}`;
+            navigate(`/room/${value}`, { state: { sharedLink } });
         }
     }, [navigate, value, inputFilled]);
-
+    
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleJoinRoom();
