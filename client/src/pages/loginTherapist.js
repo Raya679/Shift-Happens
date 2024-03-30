@@ -1,44 +1,40 @@
 // import logo from '../pictures/logo.png'
-import { useState } from "react";
-import { useSignup } from "../hooks/useSignup";
 // import img4 from '../pictures/img8.png'
+import { useState } from "react";
+import { useTherapistLogin } from "../hooks/useTherapistLogin";
+document.body.style = 'background: #A9A9A9';
+const LoginTherapist = () => {
 
-const Signup = () => {
-
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setName]=useState('');
+    const [email, setEmail]=useState('');
 
-    const{signup, error, isLoading} = useSignup()
+    const{login, error, isLoading} = useTherapistLogin()
+
 
     // function validateForm() {
 
-    //     return email.length > 0 && password.length > 0;   
+    //       return password.length > 0;   
     //   }
-    document.body.style = 'background: #A9A9A9';
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();   
-        await signup(email, username, password);
-        console.log(password, username ,email );
+        await login( email, password);
+        console.log(password, email );
       };
 
     return ( 
-        <div className="signupdiv">
+       
+        <div className="logindiv">
             <div className="img4">
                 {/* <img src={img4} width={500} height={800}/> */}
             </div>
-        <div className="signup">
+        <div className="login">
             {/* <img src={logo} width={70} height={50}/> */}
             <h2>Shift Happens</h2>
             {/* <span role="img" aria-label="rocket">🚀</span> */}
             <form onSubmit = {handleSubmit}>
-                <label>Username:</label>
-                <input type="text" required
-                value={username}
-                onChange={(e) => setName(e.target.value)}
-                />
-                <label>Email: </label>
+                <label>Email </label>
                 <input type="email" required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -55,12 +51,11 @@ const Signup = () => {
                 <button disabled={isLoading}>Submit</button>
                 {error && <div className="error">{error}</div>}
                 <pre></pre>
-                <a href = "/login">Already have an account?</a>
-                <a href = "/signupTherapist">Are you a therapist?</a>
+                <a href = "/signupTherapist">Don't have an account?</a>
             </form>
         </div>
         </div>
      );
 }
  
-export default Signup;
+export default LoginTherapist;
