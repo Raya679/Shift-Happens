@@ -9,7 +9,7 @@ import HomeAfter from "./pages/HomeAfter";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Profile from "./pages/profile";
 import Goals from "./pages/getgoal";
-// import ChatBotPage from "./pages/chatbot";
+import ChatBotPage from "./pages/chatbot";
 import Exercise from "./pages/exercise.js";
 import Footer from "./pages/footer.js";
 import Mood from "./pages/moodpage.js";
@@ -35,7 +35,7 @@ function App() {
          <Route path="/exercise" element={<GetExercise/>}/>
          <Route path="/lvc" element={<LiveVCall/>}/>
          <Route path="/room/:roomId" element={<LRoomPage/>}/>
-         {/* <Route path="/chatbot" element={<ChatBot/>}/> */}
+         <Route path="/chatbot" element={<ChatBot/>}/>
 
        </Routes>
      </BrowserRouter>
@@ -61,14 +61,14 @@ function App() {
       </>
    )
 }
-// function ChatBot() 
-// {
-//    return (
-//       <div>
-//          <ChatBotPage/>
-//       </div>
-//    )
-// }
+function ChatBot() 
+{
+   return (
+      <div>
+         <ChatBotPage/>
+      </div>
+   )
+}
 function LiveVCall(){
    return (
       <>

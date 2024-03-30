@@ -13,67 +13,72 @@
 import React, { useEffect, useState } from 'react';
 // import Footer from './Footer';
 import { Loader } from "@googlemaps/js-api-loader";
+
 //import brain from '../pictures/brain.jpg'
 export default function ContentHome() {
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
         window.scrollTo(0, 0);
-
-        const loader = new Loader({
-            apiKey: 'AIzaSyD48hQw8EEsHM_r2RyF2Mlos0c_E7jYe7U',
-            version: "weekly",
-
-        });
-
-        loader.load().then(async () => {
-            try {
-                const { google } = window;
-                const pyrmont = { lat: 23.8701334, lng: 90.2713944 };
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        pyrmont.lat = position.coords.latitude;
-                        pyrmont.lng = position.coords.longitude;
-                    });
-                }
-                const map = new google.maps.Map(document.getElementById('map'), {
-                    center: pyrmont,
-                    zoom: 17
+    
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const pyrmont = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+    
+                const loader = new Loader({
+                    apiKey: '<MAP_API_KEY>', 
+                    version: "weekly",
                 });
-
-                const service = new google.maps.places.PlacesService(map);
-
-                service.nearbySearch({
-                    location: pyrmont,
-                    radius: 4000,
-                    type: ['hospital']
-                }, function (results, status) {
-                    if (status !== 'OK') {
-                        console.error('PlacesService nearbySearch failed:', status);
-                        return;
+    
+                loader.load().then(() => {
+                    try {
+                        const { google } = window;
+    
+                        const map = new google.maps.Map(document.getElementById('map'), {
+                            center: pyrmont,
+                            zoom: 17
+                        });
+    
+                        const service = new google.maps.places.PlacesService(map);
+    
+                        service.nearbySearch({
+                            location: pyrmont,
+                            radius: 10000,
+                            type: ['hospital']
+                        }, function (results, status) {
+                            if (status !== 'OK') {
+                                console.error('PlacesService nearbySearch failed:', status);
+                                return;
+                            }
+                            createMarkers(results, map);
+                        });
+                    } catch (error) {
+                        console.error('Error loading Google Maps:', error);
                     }
-                    createMarkers(results, map);
                 });
-            } catch (error) {
-                console.error('Error loading Google Maps:', error);
-            }
-        });
+            });
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
     }, []);
-
+    
     function createMarkers(places, map) {
         const bounds = new window.google.maps.LatLngBounds();
+        const redMarkerIcon = {
+            url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', 
+            size: new window.google.maps.Size(48, 48), 
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(24, 48) 
+        };
+        
         for (let i = 0; i < places.length; i++) {
             const place = places[i];
-            const image = {
-                url: place.icon,
-                size: new window.google.maps.Size(71, 71),
-                origin: new window.google.maps.Point(0, 0),
-                anchor: new window.google.maps.Point(17, 34),
-                scaledSize: new window.google.maps.Size(25, 25)
-            };
             const marker = new window.google.maps.Marker({
                 map: map,
-                icon: image,
+                icon: redMarkerIcon, // Set the marker icon to the red marker image
                 title: place.name,
                 position: place.geometry.location
             });
@@ -81,7 +86,7 @@ export default function ContentHome() {
         }
         map.fitBounds(bounds);
     }
-
+    
     
 
     return (
