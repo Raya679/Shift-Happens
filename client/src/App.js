@@ -15,7 +15,7 @@ import Footer from "./pages/footer.js";
 import Mood from "./pages/moodpage.js";
 import VideoSession from "./pages/videoSession.js";
 import RoomPage from "./pages/room.js";
-
+import MeditationTimer from "./pages/meditate.js";
 function App() {
   const {user} = useAuthContext();
  
@@ -35,6 +35,7 @@ function App() {
          <Route path="/exercise" element={<GetExercise/>}/>
          <Route path="/lvc" element={<LiveVCall/>}/>
          <Route path="/room/:roomId" element={<LRoomPage/>}/>
+         <Route path="/meditate" element={<Meditation/>}/>
          {/* <Route path="/chatbot" element={<ChatBot/>}/> */}
 
        </Routes>
@@ -79,6 +80,21 @@ function LiveVCall(){
 
       <div className="goalspg">
          <VideoSession/>
+      </div>
+
+      </>
+   )
+}
+function Meditation(){
+   return (
+      <>
+      <div className="goalspage">
+         <Navbar/>
+         
+      </div>
+
+      <div className="goalspg">
+         <MeditationTimer/>
       </div>
 
       </>
