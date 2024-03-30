@@ -16,6 +16,7 @@ import Mood from "./pages/moodpage.js";
 import VideoSession from "./pages/videoSession.js";
 import RoomPage from "./pages/room.js";
 import MeditationTimer from "./pages/meditate.js";
+import Help from "./pages/help.js"
 function App() {
   const {user} = useAuthContext();
  
@@ -36,6 +37,7 @@ function App() {
          <Route path="/lvc" element={<LiveVCall/>}/>
          <Route path="/room/:roomId" element={<LRoomPage/>}/>
          <Route path="/meditate" element={<Meditation/>}/>
+         <Route path="/help" element={<GiveHelp/>}/>
          {/* <Route path="/chatbot" element={<ChatBot/>}/> */}
 
        </Routes>
@@ -70,6 +72,21 @@ function App() {
 //       </div>
 //    )
 // }
+function GiveHelp(){
+   return (
+      <>
+      <div className="goalspage">
+         <Navbar/>
+         {/* <Goals/> */}
+      </div>
+
+      <div className="goalspg">
+         <Help/>
+      </div>
+
+      </>
+   )
+}
 function LiveVCall(){
    return (
       <>

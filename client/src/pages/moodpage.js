@@ -4,10 +4,11 @@ import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { LinearScale, CategoryScale } from "chart.js";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 Chart.register(LinearScale, CategoryScale);
 
 function Mood() {
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
   const [moodsData, setMoodsData] = useState([]);
   const [answers, setAnswers] = useState({
     moodss: "",
@@ -15,6 +16,9 @@ function Mood() {
     stress: "",
   });
   const [error, setError] = useState(null);
+  const [showHelpPopup, setShowHelpPopup] = useState(false);
+  const [consecutiveGoodEntries, setConsecutiveGoodEntries] = useState(0);
+  const navigate = useNavigate();
 
   const QUESTIONS = [
     "How much would you rate your mood today on a scale of 10? (1 being the lowest and 10 the highest)",
@@ -34,7 +38,7 @@ function Mood() {
       await axios.post("/api/moods/add", answers, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
+          'Authorization': `Bearer ${user.token}` // Enclosed in backticks
         },
       });
       setAnswers({
@@ -52,11 +56,10 @@ function Mood() {
   useEffect(() => {
     const fetchMoods = async () => {
       try {
-        
         if (user && user.token) {
           const response = await axios.get("/api/moods", {
             headers: {
-              'Authorization': `Bearer ${user.token}`,
+              'Authorization': `Bearer ${user.token}`
             }
           });
           setMoodsData(response.data);
@@ -65,11 +68,62 @@ function Mood() {
         console.error("Error fetching moods:", error);
       }
     };
-  
+
     fetchMoods();
-  }, [user]); 
-  
-  
+  }, [user]);
+
+  const analyzeData = () => {
+    const thresholdStress = 7;
+    const thresholdSleep = 5;
+    const consecutiveGoodSleepDays = 3;
+
+    let consecutiveStressDays = 0;
+    let consecutiveSleeplessNights = 0;
+    let consecutiveGoodSleep = 0;
+    let consecutiveLowStress = 0;
+
+    for (let i = 0; i < moodsData.length; i++) {
+      const mood = moodsData[i];
+
+      if (mood.stress >= thresholdStress) {
+        consecutiveStressDays++;
+        consecutiveLowStress = 0;
+      } else {
+        consecutiveStressDays = 0;
+        consecutiveLowStress++;
+      }
+
+      if (mood.sleep <= thresholdSleep) {
+        consecutiveSleeplessNights++;
+        consecutiveGoodSleep = 0;
+      } else {
+        consecutiveSleeplessNights = 0;
+        consecutiveGoodSleep++;
+      }
+
+      if (consecutiveGoodSleep >= consecutiveGoodSleepDays && consecutiveLowStress >= consecutiveGoodSleepDays) {
+        setShowHelpPopup(false);
+        return;
+      }
+
+      if (consecutiveStressDays >= 3 || consecutiveSleeplessNights >= 3) {
+        setShowHelpPopup(true);
+        setConsecutiveGoodEntries(0);
+        return;
+      } else {
+        setConsecutiveGoodEntries((prevCount) => prevCount + 1);
+      }
+    }
+
+    if (consecutiveGoodEntries >= 3) {
+      setShowHelpPopup(false);
+    }
+  };
+
+
+  useEffect(() => {
+    analyzeData();
+  }, [moodsData]);
 
   const moodssData = moodsData.map((mood) => mood.moodss);
   const sleepData = moodsData.map((mood) => mood.sleep);
@@ -81,26 +135,34 @@ function Mood() {
     datasets: [
       {
         label: "Mood Rating",
-        data: moodssData,
+        data: moodssData.slice().reverse(), // Reverse the mood rating data
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
         label: "Sleep Hours",
-        data: sleepData,
+        data: sleepData.slice().reverse(), // Reverse the sleep hours data
         fill: false,
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
         label: "Stress Level",
-        data: stressData,
+        data: stressData.slice().reverse(), // Reverse the stress level data
         fill: false,
         borderColor: "rgb(153, 102, 255)",
         tension: 0.1,
       },
     ],
+  };
+
+  const handleHelpPopupCancel = () => {
+    setShowHelpPopup(false);
+  };
+
+  const handleHelpPopupConfirm = () => {
+    navigate("/help");
   };
 
   return (
@@ -156,6 +218,29 @@ function Mood() {
       <div className="mx-20 my-28 bg-slate-300">
         <Line data={data} />
       </div>
+      {showHelpPopup && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <p className="text-xl font-bold mb-4">
+              Let Us Help You?
+            </p>
+            <div className="flex justify-center">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-lg mr-4"
+                onClick={handleHelpPopupCancel}
+              >
+                No
+              </button>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded-lg"
+                onClick={handleHelpPopupConfirm}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
