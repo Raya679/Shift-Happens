@@ -1,6 +1,7 @@
 //login user 
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const Therapist = require('../models/therapistModel')
 
 
 const createToken = (_id) => {
@@ -42,7 +43,12 @@ const signupUser = async (req, res) => {
     // res.json({mssg: 'signup user'})
 }
 
-module.exports = {signupUser, loginUser}
+const getTherapists = async (req,res) => {
+    const therapists = await Therapist.find({});
+    res.json({ therapists});
+}
+
+module.exports = {signupUser, loginUser,getTherapists}
 
 // const User = require('../models/userModel');
 // const jwt = require('jsonwebtoken');

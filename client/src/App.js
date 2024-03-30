@@ -21,6 +21,7 @@ import SignupTherapist from "./pages/signupTherapist.js";
 import LoginTherapist from "./pages/loginTherapist.js";
 import { useAuthTherapistContext } from "./hooks/useAuthTherapistContext.js";
 import Posts from "./pages/getPost.js"
+import ViewTherapists from "./pages/viewTherapists.js";
 
 function App() {
   const {user} = useAuthContext();
@@ -48,6 +49,7 @@ function App() {
          <Route path="/signupTherapist" element={!therapist ? <SignuppageTherapist /> : <Navigate to="/homeTherapist" />}/>
          <Route path="/loginTherapist" element={!therapist ? <LoginpageTherapist /> : <Navigate to="/homeTherapist" />}/>
          <Route path="/posts" element={<GetPosts/>}/>
+         <Route path="/viewTherapists"element={<ViewTherapists/>}/>
        </Routes>
      </BrowserRouter>
    );
