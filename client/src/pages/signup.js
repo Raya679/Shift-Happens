@@ -56,6 +56,7 @@ const Signup = () => {
                 {error && <div className="error">{error}</div>}
                 <pre></pre>
                 <a href = "/login">Already have an account?</a>
+                <a href = "/signupTherapist">Are you a therapist?</a>
             </form>
         </div>
         </div>

@@ -1,128 +1,82 @@
-// import React from 'react'
-// import 'semantic-ui-react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-// // import ChatBot from 'react-simple-chatbot'
-// import { Segment } from 'semantic-ui-react'
+function ChatBotPage() {
+  const [answer, setAnswer] = useState("");
+  const [question, setQuestion] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-// import { useState } from 'react';
-// import { useEffect } from 'react';
+  const fetchAnswerFromModel = async () => {
+    setLoading(true);
+    try {
+      console.log("Fetching answer for query:", question);
 
-// import { ThemeProvider } from 'styled-components';
-// // import backgroundImage from './pages/bg2.jpg'
-// // import BackgroundImage from './pages/bg5.jpg';
-// // import './background.css';
+      const formData = new FormData();
+      formData.append("question", question);
 
-// const theme = {
-//   background: '#f5f8fb',
-//   fontFamily: 'sans-serif',
-//   headerBgColor: '#6c4f0f',
-//   headerFontColor: '#fff',
-//   headerFontSize: '20px',
-//   botBubbleColor: 'white',
-//   botFontColor: 'black',
-//   userBubbleColor: '#fff',
-//   userFontColor: '#4a4a4a',
-  
-// };
+      const response = await fetch(`http://127.0.0.1:5000/answer_to/`, {
+        method: "POST",
+        body: formData,
+      });
+      console.log("Response:", response);
 
-// const FetchAnswer = ({ steps, triggerNextStep }) => {
-//   const [answer, setAnswer] = useState('');
-//   const [error, setError] = useState(null);
-//   console.log(steps);
-//   const fetchAnswerFromModel = async (question) => {
-//     try {
-//       console.log('Fetching answer for query:', question);
+      const data = await response.json();
+      console.log("Data:", data);
 
-//       const formData = new FormData();
-//       formData.append('question', question);
+      if (response.ok) {
+        setAnswer(data.answer);
+        setError(null);
+      } else {
+        setError(data.answer || "An error occurred.");
+      }
+    } catch (error) {
+      console.error("Error fetching answer:", error);
+      setError("An error occurred while fetching the answer.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//       const response = await fetch(`http://127.0.0.1:5000/answer_to/`, {
-//         method: 'POST',
-//         body: formData,
-//       });
-//       console.log('Response:', response);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchAnswerFromModel();
+  };
 
-//       const data = await response.json();
-//       console.log('Data:', data);
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <form onSubmit={handleSubmit} className="w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="question">
+            Enter question:
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="question"
+            type="text"
+            placeholder="Type your question here..."
+            onChange={(e) => setQuestion(e.target.value)}
+            value={question}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <button
+            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            type="submit"
+            disabled={loading}>
+            {loading ? 'Loading...' : 'Ask'}
+          </button>
+        </div>
+      </form>
+      {error && <p className="text-red-500">{error}</p>}
+      {answer && (
+        <div className="w-1/2 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mt-4" role="alert">
+          <p className="font-bold">Answer:</p>
+          <p>{answer}</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
-//       if (response.ok) {
-//         console.log('data')
-//         setAnswer(data.answer);
-//         setError(null);
-//         triggerNextStep({ trigger: "waiting2" });
-//       } else {
-//         setError(data.answer || 'An error occurred.');
-//       }
-//     } catch (error) {
-//       console.error('Error fetching answer:', error);
-//       setError('An error occurred while fetching the answer.');
-//     }
-//   };
-
-//   useEffect(() => {    
-//     let userQuery = '';
-//     userQuery = steps.waiting2.value;
-//     if (userQuery) {
-//       fetchAnswerFromModel(userQuery);
-//     } else {
-//       setError('No question provided.');
-//     }
-//   }, []);
-
-//   if (error) {
-//     return <p>Error: {error}</p>;
-//   }
-
-//   return <p style={{ color: 'black' }}>{answer.answer}</p>;
-// };
-
-// const steps = [
-//   {
-//     id: 'AskQuery',
-//     message: 'Hello, how can I help you?',
-//     trigger: 'waiting2',
-//   },
-//   {
-//     id: 'waiting2',
-//     user: true,
-//     trigger: 'FetchAnswer',
-//   },
-//   {
-//     id: 'FetchAnswer',
-//     style: { botFontColor: '#fff' },
-//     component: <FetchAnswer />,
-//     asMessage: true,
-//   },
-  
-// ];
-
-// const chatBotStyle = {
-// //   backgroundImage: `url(${BackgroundImage})`,
-//   backgroundSize: 'cover',
-//   backgroundPosition: 'center',
-//   bbackgroundRepeat: 'no-repeat',
-//   width:'70vw',
-//   height:'auto',
-// };
-// function ChatBotPage() {
-
-//     useEffect(() => {
-//     const user = JSON.parse(localStorage.getItem("user"));
-//     if (!user) {
-//       window.location.href = "/login";
-//     }
-//   });
-
-//   return (
-//     <div className=''>
-//       <div className='chat-wrapper flex items-center justify-center mt-28' >
-//         <ThemeProvider theme={theme} >
-//           <ChatBot steps={steps} style={chatBotStyle} botAvatar="bot4.jpg" />
-
-//         </ThemeProvider>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default ChatBotPage
+export default ChatBotPage;
