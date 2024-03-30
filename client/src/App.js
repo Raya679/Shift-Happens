@@ -13,6 +13,7 @@ import Goals from "./pages/getgoal";
 import Exercise from "./pages/exercise.js";
 import Footer from "./pages/footer.js";
 import Mood from "./pages/moodpage.js";
+// import SideBar from "./components/sideBar.js";
 
 function App() {
   const {user} = useAuthContext();
@@ -32,6 +33,7 @@ function App() {
          <Route path="/goals" element={<GetGoal/>}/>
          <Route path="/exercise" element={<GetExercise/>}/>
          {/* <Route path="/chatbot" element={<ChatBot/>}/> */}
+         
 
        </Routes>
      </BrowserRouter>
