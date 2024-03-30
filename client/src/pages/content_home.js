@@ -29,7 +29,7 @@ export default function ContentHome() {
                 };
     
                 const loader = new Loader({
-                    apiKey: 'AIzaSyD48hQw8EEsHM_r2RyF2Mlos0c_E7jYe7U',
+                    apiKey: '<MAP_API_KEY>', 
                     version: "weekly",
                 });
     

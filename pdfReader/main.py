@@ -24,7 +24,7 @@ text_splitter = CharacterTextSplitter(
 chunks = text_splitter.split_text(result)
 
 model = SentenceTransformer("sentence_transformer_model")
-AI21_api_key = 'Nk823ttZcJda9MsH9ZgL1wFS2Ct4Ltct'
+AI21_api_key = '<Enter API Key>' 
 url = "https://api.ai21.com/studio/v1/answer"
 
 def query(texts):
