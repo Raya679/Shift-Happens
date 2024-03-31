@@ -5,7 +5,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 const ChatForm = () => {
     const {dispatch}= useChatContext();
     const {user}=useAuthContext();
-
+    // const name=user.username;
     const [writer, setWriter] = useState('')
     const [writeup, setWriteup]=useState('')
     const [error, setError] = useState(null)
@@ -19,7 +19,7 @@ const ChatForm = () => {
             return
           }
 
-        const message = {writer, writeup}
+        const message = { writeup}
 
         const response = await fetch('/api/chatmessages/add', {
             method: 'POST',
@@ -50,30 +50,30 @@ const ChatForm = () => {
 
     return (
        
-        <div className="">
-        <div className="">
-            <form onSubmit={handleSubmit} className="">
-  
-                <input
-                    type="text"
-                    placeholder="Your name"
-                    value={writer}
-                    onChange={(e) => setWriter(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Type your message..."
-                    value={writeup}
-                    onChange={(e) => setWriteup(e.target.value)}
-                />
+        <div className="chatform">
+           <div className="flex justify-center">
+                <form onSubmit={handleSubmit} className="">
+    
+                    <input
+                        type="text"
+                        placeholder="Your name"
+                        value={writer}
+                        onChange={(e) => setWriter(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Type your message..."
+                        value={writeup}
+                        onChange={(e) => setWriteup(e.target.value)}
+                    />
+                    
+                    <div className='flex justify-center'>
+                        <button className='btn bg-slate-300 hover:bg-slate-400 p-1.5 rounded-7'>Send</button>
+                    </div>
                 
-                <div className='flex justify-center'>
-                 <button className='btn bg-slate-300 hover:bg-slate-400 p-1.5 rounded-7'>Send</button>
-                </div>
-            
-            {error && <div className="error">{error}</div>}
-            </form>
-        </div>
+                    {error && <div className="error">{error}</div>}
+                </form>
+            </div>
         </div>
 
     )

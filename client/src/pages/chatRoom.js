@@ -179,8 +179,7 @@ const Messages = () => {
 
             <div className="form-chat">
                 <h3>Chat Room</h3>
-                <div className="">
-                    
+                <div className="chatform">                    
                     <ChatForm />
                 </div>
 

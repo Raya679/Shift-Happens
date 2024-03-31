@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import SideBar from "../components/sideBar";
+
 document.body.style = "background: #e2e8f0";
 function ReduceAnxiety() {
   return (
@@ -44,7 +46,7 @@ function ReduceAnxiety() {
 function Calm() {
   return (
     <>
-      <div>
+      <div >
         <div className="text-base font-light pt-3">
           Standing Forward Bend – forward bends are excellent for calming our
           nervous system, providing a release of the upper body and soothes the
@@ -167,7 +169,9 @@ function Exercise() {
   const [showEnergized, setShowEnergized] = useState(false);
   const [showSleep, setShowSleep] = useState(false);
   return (
-    <div>
+    <div className="exercisespage">
+     <SideBar/>
+     <div>
       <div className="p-10 pt-36">
         <div className="flex justify-center">
           <h1 className="font-extrabold text-4xl font-serif color">
@@ -231,6 +235,7 @@ function Exercise() {
             {showSleep && <Sleep />}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

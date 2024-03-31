@@ -93,7 +93,7 @@ function GiveHelp(){
    return (
       <>
       <div className="goalspage">
-         <Navbar/>
+         {/* <Navbar/> */}
          {/* <Goals/> */}
       </div>
 
@@ -145,7 +145,7 @@ function GetMood(){
    return (
       <>
       <div className="goalspage">
-         <Navbar/>
+         {/* <Navbar/> */}
          {/* <Goals/> */}
       </div>
 
@@ -202,9 +202,6 @@ function GetPosts() {
  function HomeAfterPage() {
   return (
      <div className="main">
-     <div className="homeafterpage">
-           <Navbar/>
-      </div>
 
      <div className="homeafterpg">
            <HomeAfter/>
@@ -234,9 +231,6 @@ function GetGoal() {
 function GetExercise() {
    return (
       <>
-      <div className="exercisepage">
-         <Navbar/>
-      </div>
 
       <div className="goalspg">
          <Exercise/>
