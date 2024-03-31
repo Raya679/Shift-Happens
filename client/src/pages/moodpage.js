@@ -51,11 +51,11 @@ function Mood() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchMoods(); // Make initial GET request when the page is opened
+      await fetchMoods();
     };
 
     fetchData();
-  }, []); // Empty dependency array to run only once when the component mounts
+  }, []); 
 
   const infoSubmit = async () => {
     try {
@@ -71,12 +71,13 @@ function Mood() {
         stress: "",
       });
       setError(null);
-      await fetchMoods(); // Call fetchMoods immediately after successful POST request
+      await fetchMoods(); 
     } catch (error) {
       console.error("Error submitting mood:", error);
       setError("Error submitting mood. Please try again later.");
     }
   };
+  
 
   useEffect(() => {
     analyzeData();
