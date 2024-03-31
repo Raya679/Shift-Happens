@@ -9,6 +9,7 @@ const posts = require("./routes/posts");
 const replies = require("./routes/replies");
 const cors = require("cors");
 const chatroomroutes = require('./routes/chatRoom');
+const therapistRoutes = require('./routes/therapist')
 
 const app = express()
 
@@ -30,7 +31,7 @@ app.use("/api/reply", replies);
 
 app.use('/api/chatmessages', chatroomroutes)
 
-
+app.use('/api/therapist/',therapistRoutes)
 //Routes 
 
 // app.get("/messages", async (req, res) => {

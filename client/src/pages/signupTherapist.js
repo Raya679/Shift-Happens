@@ -1,15 +1,17 @@
 // import logo from '../pictures/logo.png'
 import { useState } from "react";
-import { useSignup } from "../hooks/useSignup";
+import { useTherapistSignup } from "../hooks/useTherapistSignUp";
 // import img4 from '../pictures/img8.png'
 
-const Signup = () => {
-
+const SignupTherapist = () => {
+    
+    const [name, setName]=useState('');
     const [email, setEmail] = useState('');
+    const [specialization,setSpecialization] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setName]=useState('');
+   
 
-    const{signup, error, isLoading} = useSignup()
+    const{signup, error, isLoading} = useTherapistSignup()
 
     // function validateForm() {
 
@@ -19,8 +21,8 @@ const Signup = () => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();   
-        await signup(email, username, password);
-        console.log(password, username ,email );
+        await signup(name,email,specialization, password);
+        console.log(password, name ,email );
       };
 
     return ( 
@@ -33,15 +35,20 @@ const Signup = () => {
             <h2>Shift Happens</h2>
             {/* <span role="img" aria-label="rocket">🚀</span> */}
             <form onSubmit = {handleSubmit}>
-                <label>Username:</label>
+                <label>Name:</label>
                 <input type="text" required
-                value={username}
+                value={name}
                 onChange={(e) => setName(e.target.value)}
                 />
                 <label>Email: </label>
                 <input type="email" required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                />
+                <label>Specialization: </label>
+                <input type="text" required
+                value={specialization}
+                onChange={(e) => setSpecialization(e.target.value)}
                 />
                 <pre>
                     <label>Password:</label>
@@ -55,12 +62,11 @@ const Signup = () => {
                 <button disabled={isLoading}>Submit</button>
                 {error && <div className="error">{error}</div>}
                 <pre></pre>
-                <a href = "/login">Already have an account?</a>
-                <a href = "/signupTherapist">Are you a therapist?</a>
+                <a href = "/loginTherapist">Already have an account?</a>
             </form>
         </div>
         </div>
      );
 }
  
-export default Signup;
+export default SignupTherapist;

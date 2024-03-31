@@ -9,15 +9,23 @@ import HomeAfter from "./pages/HomeAfter";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Profile from "./pages/profile";
 import Goals from "./pages/getgoal";
-// import ChatBotPage from "./pages/chatbot";
+import ChatBotPage from "./pages/chatbot";
 import Exercise from "./pages/exercise.js";
 import Footer from "./pages/footer.js";
 import Mood from "./pages/moodpage.js";
 import VideoSession from "./pages/videoSession.js";
 import RoomPage from "./pages/room.js";
+import MeditationTimer from "./pages/meditate.js";
+import Help from "./pages/help.js"
+import SignupTherapist from "./pages/signupTherapist.js";
+import LoginTherapist from "./pages/loginTherapist.js";
+import { useAuthTherapistContext } from "./hooks/useAuthTherapistContext.js";
+import Posts from "./pages/getPost.js"
+import ViewTherapists from "./pages/viewTherapists.js";
 
 function App() {
   const {user} = useAuthContext();
+  const {therapist} = useAuthTherapistContext()
  
 
    return (
@@ -35,8 +43,13 @@ function App() {
          <Route path="/exercise" element={<GetExercise/>}/>
          <Route path="/lvc" element={<LiveVCall/>}/>
          <Route path="/room/:roomId" element={<LRoomPage/>}/>
-         {/* <Route path="/chatbot" element={<ChatBot/>}/> */}
-
+         <Route path="/meditate" element={<Meditation/>}/>
+         <Route path="/help" element={<GiveHelp/>}/>
+         <Route path="/chatbot" element={<ChatBot/>}/>
+         <Route path="/signupTherapist" element={!therapist ? <SignuppageTherapist /> : <Navigate to="/homeTherapist" />}/>
+         <Route path="/loginTherapist" element={!therapist ? <LoginpageTherapist /> : <Navigate to="/homeTherapist" />}/>
+         <Route path="/posts" element={<GetPosts/>}/>
+         <Route path="/viewTherapists"element={<ViewTherapists/>}/>
        </Routes>
      </BrowserRouter>
    );
@@ -61,14 +74,29 @@ function App() {
       </>
    )
 }
-// function ChatBot() 
-// {
-//    return (
-//       <div>
-//          <ChatBotPage/>
-//       </div>
-//    )
-// }
+
+function GiveHelp(){
+   return (
+      <>
+      <div className="goalspage">
+         <Navbar/>
+         {/* <Goals/> */}
+      </div>
+
+      <div className="goalspg">
+         <Help/>
+      </div>
+
+      </>
+   )}
+function ChatBot() 
+{
+   return (
+      <div>
+         <ChatBotPage/>
+      </div>
+   )
+}
 function LiveVCall(){
    return (
       <>
@@ -79,6 +107,21 @@ function LiveVCall(){
 
       <div className="goalspg">
          <VideoSession/>
+      </div>
+
+      </>
+   )
+}
+function Meditation(){
+   return (
+      <>
+      <div className="goalspage">
+         <Navbar/>
+         
+      </div>
+
+      <div className="goalspg">
+         <MeditationTimer/>
       </div>
 
       </>
@@ -99,6 +142,21 @@ function GetMood(){
       </>
    )
 }
+function GetPosts() {
+   return (
+      <>
+      <div>
+         <Navbar/>
+         {/* <Goals/> */}
+      </div>
+
+      <div>
+         <Posts/>
+      </div>
+
+      </>
+   )
+}
  function Signuppage() {
    return (
       <div>
@@ -108,6 +166,20 @@ function GetMood(){
 
       <div className="signuppg">
             <Signup/>
+      </div>
+      </div>
+   )
+ }
+
+ function SignuppageTherapist() {
+   return (
+      <div>
+      <div className="signuppage">
+            <Navbar/>
+       </div>
+
+      <div className="signuppg">
+            <SignupTherapist/>
       </div>
       </div>
    )
@@ -186,6 +258,20 @@ function ProfilePage() {
 
               <div className="loginpg">
                  <Login/>
+              </div>
+      </div>
+   );
+ }
+
+ function LoginpageTherapist() {
+   return (
+      <div>
+      <div className="loginpage">
+                  <Navbar/>
+               </div>
+
+              <div className="loginpg">
+                 <LoginTherapist/>
               </div>
       </div>
    );
