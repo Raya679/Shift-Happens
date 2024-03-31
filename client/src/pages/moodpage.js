@@ -34,12 +34,35 @@ function Mood() {
     }));
   };
 
+  const fetchMoods = async () => {
+    try {
+      if (user && user.token) {
+        const response = await axios.get("/api/moods", {
+          headers: {
+            'Authorization': `Bearer ${user.token}`
+          }
+        });
+        setMoodsData(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching moods:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchMoods(); // Make initial GET request when the page is opened
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to run only once when the component mounts
+
   const infoSubmit = async () => {
     try {
       await axios.post("/api/moods/add", answers, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}` // Enclosed in backticks
+          'Authorization': `Bearer ${user.token}`
         },
       });
       setAnswers({
@@ -48,6 +71,7 @@ function Mood() {
         stress: "",
       });
       setError(null);
+      await fetchMoods(); // Call fetchMoods immediately after successful POST request
     } catch (error) {
       console.error("Error submitting mood:", error);
       setError("Error submitting mood. Please try again later.");
@@ -55,23 +79,8 @@ function Mood() {
   };
 
   useEffect(() => {
-    const fetchMoods = async () => {
-      try {
-        if (user && user.token) {
-          const response = await axios.get("/api/moods", {
-            headers: {
-              'Authorization': `Bearer ${user.token}`
-            }
-          });
-          setMoodsData(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching moods:", error);
-      }
-    };
-
-    fetchMoods();
-  }, [user]);
+    analyzeData();
+  }, [moodsData]);
 
   const analyzeData = () => {
     const thresholdStress = 7;
@@ -121,11 +130,6 @@ function Mood() {
     }
   };
 
-
-  useEffect(() => {
-    analyzeData();
-  }, [moodsData]);
-
   const moodssData = moodsData.map((mood) => mood.moodss);
   const sleepData = moodsData.map((mood) => mood.sleep);
   const stressData = moodsData.map((mood) => mood.stress);
@@ -136,21 +140,21 @@ function Mood() {
     datasets: [
       {
         label: "Mood Rating",
-        data: moodssData.slice().reverse(), // Reverse the mood rating data
+        data: moodssData.slice().reverse(),
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
         label: "Sleep Hours",
-        data: sleepData.slice().reverse(), // Reverse the sleep hours data
+        data: sleepData.slice().reverse(),
         fill: false,
         borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
         label: "Stress Level",
-        data: stressData.slice().reverse(), // Reverse the stress level data
+        data: stressData.slice().reverse(),
         fill: false,
         borderColor: "rgb(153, 102, 255)",
         tension: 0.1,
@@ -187,7 +191,7 @@ function Mood() {
             </div>
             <div>
               <select
-                value={answers.job}
+                value={answers[`moodss${index}`]}
                 onChange={(e) =>
                   onOptionChange(
                     ["moodss", "sleep", "stress"][index],
@@ -196,7 +200,7 @@ function Mood() {
                 }
                 className=" bg-gray-700 border-gray-400 border-4 rounded-[40px] w-1/2 text-white py-2 px-10 mb-5"
               >
-                <option value="" disabled hidden>
+                <option value="" >
                   Rate it on a scale of 10
                 </option>
                 {[...Array(10)].map((_, i) => (
