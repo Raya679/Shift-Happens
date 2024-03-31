@@ -23,6 +23,9 @@ import { useAuthTherapistContext } from "./hooks/useAuthTherapistContext.js";
 import Posts from "./pages/getPost.js"
 import ViewTherapists from "./pages/viewTherapists.js";
 import Calendar from "./pages/Calendar.js"
+import Messages from "./pages/chatRoom.js";
+// import SideBar from "./components/sideBar.js";
+
 function App() {
   const {user} = useAuthContext();
   const {therapist} = useAuthTherapistContext()
@@ -51,6 +54,8 @@ function App() {
          <Route path="/posts" element={<GetPosts/>}/>
          <Route path="/viewTherapists"element={<ViewTherapists/>}/>
          <Route path="/calendar" element={<GetCalendar/>}/>
+         <Route path="/chatroom" element={<ChattRoom/>}/>
+
        </Routes>
      </BrowserRouter>
    );
@@ -64,6 +69,17 @@ function App() {
        <Footer/>
      </div>
    );
+ }
+
+ function ChattRoom() 
+ {
+   return (
+      <>
+         <div>
+            <Messages/>
+         </div>
+      </>
+   )
  }
  function LRoomPage(){
    return (
@@ -80,7 +96,7 @@ function GiveHelp(){
    return (
       <>
       <div className="goalspage">
-         <Navbar/>
+         {/* <Navbar/> */}
          {/* <Goals/> */}
       </div>
 
@@ -132,7 +148,7 @@ function GetMood(){
    return (
       <>
       <div className="goalspage">
-         <Navbar/>
+         {/* <Navbar/> */}
          {/* <Goals/> */}
       </div>
 
@@ -189,9 +205,6 @@ function GetPosts() {
  function HomeAfterPage() {
   return (
      <div className="main">
-     <div className="homeafterpage">
-           <Navbar/>
-      </div>
 
      <div className="homeafterpg">
            <HomeAfter/>
@@ -221,9 +234,6 @@ function GetGoal() {
 function GetExercise() {
    return (
       <>
-      <div className="exercisepage">
-         <Navbar/>
-      </div>
 
       <div className="goalspg">
          <Exercise/>

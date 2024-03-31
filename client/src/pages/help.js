@@ -1,9 +1,11 @@
 import { useAuthContext } from "../hooks/useAuthContext";
 import goalspg from '../pictures/goals.jpg'
 import mind from '../pictures/mind.png'
-import mood from '../pictures/moodTracker.png'
+// import mood from '../pictures/moodTracker.png'
 import vcall from '../pictures/vc.png'
 import chat from '../pictures/chat.png'
+import SideBar from "../components/sideBar";
+
 document.body.style = "background: #e2e8f0";
 const HomeAfter = () => {
     const { user } = useAuthContext();
@@ -11,6 +13,8 @@ const HomeAfter = () => {
     return (
         <div>
             {user && (
+                <div className="flex">
+                    <SideBar/>
                 <div className="pt-24 flex justify-center m-14">
                     {/* <h1>WELCOME {user.username}</h1> */}
                     {/* <h5>Your Path to Prosperity Starts Here </h5> */}
@@ -40,7 +44,7 @@ const HomeAfter = () => {
                                     </div>
                                 </div>
                             </a>
-                            <a href="/">
+                            <a href="/chatroom">
                                 <div className="flex justify-center w-full">
                                     <div className="bg-slate-100 h-1/3 w-1/3 flex justify-center p-20 rounded-2xl m-10">
                                         <img src={chat} className=" w-3/4"></img>
@@ -65,6 +69,7 @@ const HomeAfter = () => {
                         </div>
                     </div>
                 </div>
+            </div>
             )}
         </div>
     );

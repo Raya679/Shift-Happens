@@ -34,86 +34,15 @@ body
   animation: breathe-out 4s infinite;
 }
 
-.exercisepage 
-{
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-image: url("bckg.png") ; */
- /* background-color:rgb(30, 47, 240); */
- background-color:black;
- /* color: black; */
- height: 100px;
-}
-.loginpage
-{
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-image: url("bckg.png") ; */
- /* background-color:rgb(30, 47, 240); */
- background-color:black;
- /* color: black; */
- height: 100px;
- 
-}
 
-.signuppage
-{
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-image: url("bckg.png") ; */
- /* background-color:rgb(30, 47, 240); */
- background-color:black;
- height: 100px;
- 
-}
 
-.aboutpage
-{
-  /* background-image: url("bckg.png") ; */
- /* background-color:rgb(30, 47, 240); */
- background-color:black;
- height: 100px;
- 
-}
 
-.contactpage
-{
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  /* background-image: url("bckg.png") ; */
- /* background-color:rgb(30, 47, 240); */
- background-color:black;
- height: 100px;
- 
-}
 
-.goalspage 
-{
-  /* position: fixed;
-  top: 0; */
-  /* width: 100%;
-  z-index: 1000; */
-  /* background-image: url("bckg.png") ; */
- /* background-color:rgb(30, 47, 240); */
- background-color:black;
- height: 100px;
-}
-.getstockpage
-{
-  /* background-image: url("bckg.png") ; */
- /* background-color:rgb(30, 47, 240); */
- background-color:black;
- height: 100px;
- 
-}
+
+
+
+
+
 
 /* .getstockpg 
 {
@@ -808,16 +737,36 @@ div.error {
 {
   padding-bottom: 3%;
 }
-
-/* .fetchchats 
+.chatform input 
+{
+  margin-left: 3%;
+  border: 1px solid black;
+}
+.chatform 
+{
+  place-items: centre;
+}
+.fetchchats 
 {
   display: flex;
 }
 
-.form-chats 
+.form-chat
 {
   width: 100%;
 }
- */
 
+.form-chat h3 
+{
+  text-align: center;
+}
 
+ .moodspage 
+ {
+  display: flex;
+ }
+
+.exercisespage 
+{
+  display: flex;
+}

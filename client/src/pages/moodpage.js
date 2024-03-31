@@ -5,6 +5,7 @@ import Chart from "chart.js/auto";
 import { LinearScale, CategoryScale } from "chart.js";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import SideBar from "../components/sideBar";
 document.body.style = "background: #e2e8f0";
 Chart.register(LinearScale, CategoryScale);
 
@@ -53,9 +54,11 @@ function Mood() {
     const fetchData = async () => {
       await fetchMoods();
     };
-
+    if(user){
     fetchData();
-  }, []); 
+    }
+    
+  }, [user]); 
 
   const infoSubmit = async () => {
     try {
@@ -173,79 +176,86 @@ function Mood() {
 
   return (
     <div>
-      <div className="pt-36">
-        <div className="flex justify-center">
-          <h1 className="font-extrabold text-4xl font-serif color">
-            Mood-Tracker
-          </h1>
-        </div>
-      </div>
+      {user && (
+      <div className="moodspage">
+        <SideBar/>
+        <div>
+          <div className="pt-36">
+            <div className="flex justify-center">
+              <h1 className="font-extrabold text-4xl font-serif color">
+                Mood-Tracker
+              </h1>
+            </div>
+          </div>
 
-      <div>
-        {QUESTIONS.map((question, index) => (
+          <div>
+            {QUESTIONS.map((question, index) => (
+              <div
+                key={index}
+                className=" rounded-full mx-20 mt-20 bg-slate-300 px-9 py-7 shadow-xl"
+              >
+                <div className="font-oswald font-semibold text-xl py-3">
+                  {question}
+                </div>
+                <div>
+                  <select
+                    value={answers[`moodss${index}`]}
+                    onChange={(e) =>
+                      onOptionChange(
+                        ["moodss", "sleep", "stress"][index],
+                        e.target.value
+                      )
+                    }
+                    className=" bg-gray-700 border-gray-400 border-4 rounded-[40px] w-1/2 text-white py-2 px-10 mb-5"
+                  >
+                    <option value="" >
+                      Rate it on a scale of 10
+                    </option>
+                    {[...Array(10)].map((_, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            ))}
+          </div>
           <div
-            key={index}
-            className=" rounded-full mx-20 mt-20 bg-slate-300 px-9 py-7 shadow-xl"
+            onClick={infoSubmit}
+            className="bg-gray-700 text-1xl font-bold mt-3 mb-9 py-2 px-4 rounded-[10px] border-4 border-gray-400 ml-auto mr-40 w-min text-white cursor-pointer"
           >
-            <div className="font-oswald font-semibold text-xl py-3">
-              {question}
-            </div>
-            <div>
-              <select
-                value={answers[`moodss${index}`]}
-                onChange={(e) =>
-                  onOptionChange(
-                    ["moodss", "sleep", "stress"][index],
-                    e.target.value
-                  )
-                }
-                className=" bg-gray-700 border-gray-400 border-4 rounded-[40px] w-1/2 text-white py-2 px-10 mb-5"
-              >
-                <option value="" >
-                  Rate it on a scale of 10
-                </option>
-                {[...Array(10)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-              </select>
-            </div>
+            SUBMIT
           </div>
-        ))}
-      </div>
-      <div
-        onClick={infoSubmit}
-        className="bg-gray-700 text-1xl font-bold mt-3 mb-9 py-2 px-4 rounded-[10px] border-4 border-gray-400 ml-auto mr-40 w-min text-white cursor-pointer"
-      >
-        SUBMIT
-      </div>
-      {error && <div className="text-red-500 mx-20">{error}</div>}
-      <div className="mx-20 my-28 bg-slate-300">
-        <Line data={data} />
-      </div>
-      {showHelpPopup && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-md w-96 h-60">
-            <p className="text-xl font-bold mt-12 ml-16">
-              Let Us Help You?
-            </p>
-            <div className="flex justify-center mt-10">
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded-lg mr-4"
-                onClick={handleHelpPopupCancel}
-              >
-                No
-              </button>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded-lg"
-                onClick={handleHelpPopupConfirm}
-              >
-                Yes
-              </button>
-            </div>
+          {error && <div className="text-red-500 mx-20">{error}</div>}
+          <div className="mx-20 my-28 bg-slate-300">
+            <Line data={data} />
           </div>
+          {showHelpPopup && (
+            <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+              <div className="bg-white p-8 rounded-lg shadow-md w-96 h-60">
+                <p className="text-xl font-bold mt-12 ml-16">
+                  Let Us Help You?
+                </p>
+                <div className="flex justify-center mt-10">
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg mr-4"
+                    onClick={handleHelpPopupCancel}
+                  >
+                    No
+                  </button>
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg"
+                    onClick={handleHelpPopupConfirm}
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
+      </div>
       )}
     </div>
   );
