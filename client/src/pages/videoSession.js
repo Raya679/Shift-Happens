@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
+import SideBar from "../components/sideBar";
+
 document.body.style = "background: #e2e8f0";
 const VideoSession = () => {
     const [value, setValue] = useState('');
@@ -26,6 +28,9 @@ const VideoSession = () => {
     };
 
     return (
+        
+            
+       
         <div className="flex justify-center items-center h-screen">
             <div className="w-1/2 py-10 px-6 bg-gray-100 rounded-lg shadow-md -mt-48">
                 <input

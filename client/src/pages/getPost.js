@@ -3,6 +3,7 @@ import { usePostContext } from "../hooks/usePostContext";
 import PostDetails from "../components/postDetails";
 import PostForm from "../components/postForm";
 import { useAuthContext } from "../hooks/useAuthContext";
+import SideBar from "../components/sideBar";
 
 const Posts = () => {
     const { posts, dispatch } = usePostContext();
@@ -26,6 +27,9 @@ const Posts = () => {
     }, [dispatch, user]);
 
     return (
+        <div className="flex">
+
+        <SideBar/>
         <div className="w-full">
             <PostForm />
             <div className="w-full" >
@@ -33,6 +37,7 @@ const Posts = () => {
                     <PostDetails post={post} key={post._id} />
                 ))}
             </div>
+        </div>
         </div>
     );
 };

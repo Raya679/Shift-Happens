@@ -79,7 +79,7 @@ const PostForm = () => {
             <textarea
               onChange={(e) => setDescription(e.target.value)}
               value={description}
-              className={`border-2 border-slate-500 m-0 rounded-xl overflow-y-scroll overflow-x-hidden h-32 w-4/5 ${
+              className={`border-2 border-slate-500 m-2 rounded-xl overflow-y-scroll overflow-x-hidden h-32 w-4/5 ${
                 emptyFields.includes("description") ? "error" : ""
               }`}
             />

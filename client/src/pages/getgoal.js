@@ -5,6 +5,8 @@ import GoalForm from "../components/goalform";
 import { useAuthContext } from "../hooks/useAuthContext";
 // import { Link } from "react-router-dom";
 import SideBar from "../components/sideBar";
+import bg from "../pictures/duplo24.jpeg"
+
 
 const Goals = () => {
     const { goals, dispatch } = useGoalContext();
@@ -67,7 +69,7 @@ const Goals = () => {
         <div className="fetchgoals">
             <SideBar />
 
-            <div className="form-goal">
+            <div className="form-goal" style={{ backgroundImage: `url(${bg})`, backgroundSize: "cover", backgroundRepeat: "no-repeat" }}>
                 <div className="form">
                     <GoalForm />
                 </div>

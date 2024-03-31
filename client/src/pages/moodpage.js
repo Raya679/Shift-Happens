@@ -6,7 +6,9 @@ import { LinearScale, CategoryScale } from "chart.js";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import SideBar from "../components/sideBar";
-document.body.style = "background: #e2e8f0";
+import bg from "../pictures/duplo24.jpeg"
+
+// document.body.style = "background: #e2e8f0";
 Chart.register(LinearScale, CategoryScale);
 
 function Mood() {
@@ -180,9 +182,9 @@ function Mood() {
       <div className="moodspage">
         <SideBar/>
         <div>
-          <div className="pt-36">
+          <div className="pt-16" >
             <div className="flex justify-center">
-              <h1 className="font-extrabold text-4xl font-serif color">
+              <h1 className="font-extrabold text-4xl font-serif color" style={{ backgroundImage: `url(${bg})`, backgroundSize: "cover", backgroundRepeat: "no-repeat" }}>
                 Mood-Tracker
               </h1>
             </div>

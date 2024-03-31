@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import MoodGraph from "./moodGraph";
 import img1 from "../pictures/img1.png";
 import SideBar from "../components/sideBar";
-
+import bg from "../pictures/duplo24.jpeg"
 
 
 document.body.style = 'background: #cbd5e1';
@@ -44,7 +44,7 @@ const HomeAfter = () => {
 
 
   return (
-    <div>
+    <div >
       {user && (
         // <div className="pt-24 flex justify-center m-14">
         //   <h1>WELCOME {user.username}</h1>
@@ -89,10 +89,12 @@ const HomeAfter = () => {
         //     </div>
         //   </div>
         // </div>
+        <div >
         <div className="homeAfter">
+          
           <SideBar/>
-
-          <div className="content">
+          <div >
+          <div className="content" style={{ backgroundImage: `url(${bg})`, backgroundSize: "cover", backgroundRepeat: "no-repeat" }} >
             <h2>Welcome to Shift Happens, {user.username}</h2>
             <div className="image-quote">
               <img src={img1} alt="Image" className="center-image"></img>
@@ -152,8 +154,11 @@ const HomeAfter = () => {
           </div>
 
         </div>
+        </div>
+        </div>
       )}
     </div>
+    
   );
 };
 

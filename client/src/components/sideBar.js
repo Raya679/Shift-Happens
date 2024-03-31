@@ -18,25 +18,31 @@ const SideBar = () => {
             
               <h1>Shift Happens</h1>
               <Link to="/home" >
-                <p>Dashboard</p>
+                <p  className="rounded-l-full">Dashboard</p>
               </Link>
               {/* <NavLink to="/home" activeClassName="active-link">
                 <p>Dashboard</p>
               </NavLink> */}
               <Link to="/chatbot">
-                <p>ChatBot</p>
+                <p className="rounded-l-full">ChatBot</p>
               </Link>
               <Link to="/exercise">
-                <p>Exercises</p>
+                <p className="rounded-l-full">Exercises</p>
               </Link>
               <Link to="/moods">
-                <p>Mood Tracker</p>
+                <p className="rounded-l-full">Mood Tracker</p>
+              </Link>
+              <Link to="/posts">
+                <p className="rounded-l-full">Community Page</p>
+              </Link>
+              <Link to="/bloghome">
+                <p className="rounded-l-full">Blogs</p>
               </Link>
               <Link to="/goals">
-                <p>Goal Setter</p>
+                <p className="rounded-l-full">Goal Setter</p>
               </Link>
               <Link to="/help">
-                <p>Services</p>
+                <p className="rounded-l-full">Services</p>
               </Link>
               <Link to="/">
               <button

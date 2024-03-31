@@ -24,7 +24,11 @@ import Posts from "./pages/getPost.js"
 import ViewTherapists from "./pages/viewTherapists.js";
 import Calendar from "./pages/Calendar.js"
 import Messages from "./pages/chatRoom.js";
-// import SideBar from "./components/sideBar.js";
+import BlogDetails from "./pages/BlogDetails.js";
+import BookDetails from "./pages/BookDetails.js";
+import BlogHome from "./pages/BlogHome.js";
+
+// import SideBar from "./componentsclassName="rounded-l-full"/sideBar.js";
 
 function App() {
   const {user} = useAuthContext();
@@ -55,7 +59,10 @@ function App() {
          <Route path="/viewTherapists"element={<ViewTherapists/>}/>
          <Route path="/calendar" element={<GetCalendar/>}/>
          <Route path="/chatroom" element={<ChattRoom/>}/>
-
+         <Route path="/bloghome" element={<BlogHome/>}/>
+         <Route path="/blogs/:id" element={<BlogDetail/>}/>
+         <Route path="/books/:id" element={<BookDetail/>}/>
+         <Route path="*" element={<Notfound />}/>
        </Routes>
      </BrowserRouter>
    );
@@ -70,7 +77,25 @@ function App() {
      </div>
    );
  }
+function BlogDetail () {
+   <>
+      <BlogDetails/>
+   </>
+}
 
+function BookDetail () 
+{
+   <>
+      <BookDetails/>
+   </>
+}
+
+function Notfound () 
+{
+   <>
+      <Notfound/>
+   </>
+}
  function ChattRoom() 
  {
    return (
@@ -118,7 +143,7 @@ function LiveVCall(){
    return (
       <>
       <div className="goalspage">
-         <Navbar/>
+         {/* <Navbar/> */}
          {/* <Goals/> */}
       </div>
 
@@ -132,10 +157,6 @@ function LiveVCall(){
 function Meditation(){
    return (
       <>
-      <div className="goalspage">
-         <Navbar/>
-         
-      </div>
 
       <div className="goalspg">
          <MeditationTimer/>
@@ -163,7 +184,7 @@ function GetPosts() {
    return (
       <>
       <div>
-         <Navbar/>
+         {/* <Navbar/> */}
          {/* <Goals/> */}
       </div>
 
@@ -219,7 +240,7 @@ function GetGoal() {
    return (
       <>
       <div className="goalspage">
-         <Navbar/>
+         {/* <Navbar/> */}
          {/* <Goals/> */}
       </div>
 
@@ -319,7 +340,7 @@ function GetCalendar() {
    return (
       <div>
          <div className="contactpage">
-                <Navbar/>
+                {/* <Navbar/> */}
          </div>
 
                <div className="contactpg">

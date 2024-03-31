@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import meditate from '../pictures/medi.gif';
 import sleep from '../pictures/sleep.gif'
+import SideBar from '../components/sideBar';
 document.body.style = "background: #e2e8f0";
 const MeditationTimer = () => {
     const [remainingTime, setRemainingTime] = useState(0);
@@ -62,7 +63,10 @@ const MeditationTimer = () => {
     };
 
     return (
-        <div className="container mx-auto flex flex-col justify-center items-center h-screen mt-36 bg-zinc-800 rounded-3xl">
+        <div className="flex">
+
+        <SideBar/>
+        <div className="container mx-3 flex flex-col justify-center items-center h-screen mt-36 bg-zinc-800 rounded-3xl">
             {!isTimerRunning && (
                 <div className="flex">
                     <div className='form w-3/5 mt-36 '>
@@ -134,7 +138,9 @@ const MeditationTimer = () => {
                         </button>
                     </div>
                 </div>
+                
             )}
+        </div>
         </div>
     );
 };

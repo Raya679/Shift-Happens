@@ -50,13 +50,12 @@ function ChatBotPage() {
   return (
     <div>
     {user && (
-      <div className="flex">
-        <SideBar/>
+     
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
         <form onSubmit={handleSubmit} className="w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="question">
-              Enter question:
+              Ask Me Anything
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -84,7 +83,6 @@ function ChatBotPage() {
           </div>
         )}
       </div>
-    </div>
     )}
     </div>
   );

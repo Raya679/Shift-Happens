@@ -561,6 +561,7 @@ div.error {
   background-color: white;
   width:100%;
   padding-left: 2%;
+  
 }
 .sidebar button 
 {
@@ -619,6 +620,7 @@ div.error {
 .homeAfter .content h2 
 {
   font-size:150%;
+  padding-top: 0.5%;
 }
 
 .homeAfter .content p 
@@ -798,7 +800,7 @@ div.error {
 }
 
 .blog-preview h1, .book-preview h1 {
-  font-size: 30px;
+  font-size: 150%;
   color: cornflowerblue;
   margin-bottom: 8px;
 }
@@ -859,3 +861,10 @@ div.error {
     padding-top: 25px;
     padding-bottom: 25px;
   }
+
+  .moods 
+  {
+    background: linear-gradient(90deg, rgba(133,131,131,1) 0%, rgba(194,188,190,1) 33%, rgba(238,234,234,1) 67%);
+  }
+
+  
