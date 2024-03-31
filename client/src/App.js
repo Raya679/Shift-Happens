@@ -22,6 +22,8 @@ import LoginTherapist from "./pages/loginTherapist.js";
 import { useAuthTherapistContext } from "./hooks/useAuthTherapistContext.js";
 import Posts from "./pages/getPost.js"
 import ViewTherapists from "./pages/viewTherapists.js";
+import Messages from "./pages/chatRoom.js";
+// import SideBar from "./components/sideBar.js";
 
 function App() {
   const {user} = useAuthContext();
@@ -50,6 +52,7 @@ function App() {
          <Route path="/loginTherapist" element={!therapist ? <LoginpageTherapist /> : <Navigate to="/homeTherapist" />}/>
          <Route path="/posts" element={<GetPosts/>}/>
          <Route path="/viewTherapists"element={<ViewTherapists/>}/>
+         <Route path="/chatroom" element={<ChattRoom/>}/>
        </Routes>
      </BrowserRouter>
    );
@@ -63,6 +66,17 @@ function App() {
        <Footer/>
      </div>
    );
+ }
+
+ function ChattRoom() 
+ {
+   return (
+      <>
+         <div>
+            <Messages/>
+         </div>
+      </>
+   )
  }
  function LRoomPage(){
    return (

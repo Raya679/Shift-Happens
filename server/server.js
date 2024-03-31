@@ -10,6 +10,7 @@ const replies = require("./routes/replies");
 const cors = require("cors");
 const chatroomroutes = require('./routes/chatRoom');
 const therapistRoutes = require('./routes/therapist')
+const Appointment = require("./routes/appointment");
 
 const app = express()
 
@@ -32,45 +33,8 @@ app.use("/api/reply", replies);
 app.use('/api/chatmessages', chatroomroutes)
 
 app.use('/api/therapist/',therapistRoutes)
-//Routes 
 
-// app.get("/messages", async (req, res) => {
-//   // const user_id = req.user._id
-//   try {
-//       const messages = await ChatMessage.find();
-//       res.json(messages);
-//   } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// app.post("/messages", async (req, res) => {
-  
-//   try {
-//       const { user, message } = req.body;
-
-//       if (!user || !message) {
-//           return res
-//               .status(400)
-//               .json({ error: "User and message are required" });
-//       }
-
-//       const chatMessage = new ChatMessage({
-//           user,
-//           message,
-//       });
-
-//       await chatMessage.save();
-
-//       res.status(201).json(chatMessage);
-//   } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-
+app.use('/api/appointmentinfos', Appointment);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

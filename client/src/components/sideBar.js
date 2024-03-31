@@ -35,7 +35,7 @@ const SideBar = () => {
               <Link to="/goals">
                 <p>Goal Setter</p>
               </Link>
-              <Link to="/services">
+              <Link to="/help">
                 <p>Services</p>
               </Link>
               <Link to="/">

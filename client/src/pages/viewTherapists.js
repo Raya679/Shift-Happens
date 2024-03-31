@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { Link } from "react-router-dom";
 
 const ViewTherapists = () => {
   const { user } = useAuthContext();
@@ -30,6 +31,9 @@ const ViewTherapists = () => {
           <p className="m-2">Email: {therapist.email}</p>
           <p className="m-2">Specialization: {therapist.specialization}</p>
           <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Consult</button>
+          <Link to="/chatroom">
+            <p>Chat</p>
+          </Link>
           <hr />
         </div>
       ))}

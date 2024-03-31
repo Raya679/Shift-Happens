@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 function ChatBotPage() {
   const [answer, setAnswer] = useState("");
   const [question, setQuestion] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const {user} = useAuthContext();
 
   const fetchAnswerFromModel = async () => {
     setLoading(true);
@@ -44,6 +47,8 @@ function ChatBotPage() {
   };
 
   return (
+    <div>
+    {user && (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <form onSubmit={handleSubmit} className="w-1/2 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
@@ -75,6 +80,8 @@ function ChatBotPage() {
           <p>{answer}</p>
         </div>
       )}
+    </div>
+    )}
     </div>
   );
 }
