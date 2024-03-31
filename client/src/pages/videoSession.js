@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
-
+document.body.style = "background: #e2e8f0";
 const VideoSession = () => {
     const [value, setValue] = useState('');
     const [inputFilled, setInputFilled] = useState(false);

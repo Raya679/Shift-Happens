@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useParams, useLocation } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-
+document.body.style = "background: #e2e8f0";
 const RoomPage = () => {
     const { user, loading } = useAuthContext();
     const { roomId } = useParams();
