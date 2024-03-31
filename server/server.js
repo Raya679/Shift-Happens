@@ -10,6 +10,9 @@ const replies = require("./routes/replies");
 const cors = require("cors");
 const chatroomroutes = require('./routes/chatRoom');
 const therapistRoutes = require('./routes/therapist')
+
+const calendarRoutes= require('./routes/calendar')
+
 const Appointment = require("./routes/appointment");
 
 const app = express()
@@ -26,7 +29,7 @@ app.use((req, res, next) => {
 app.use('/api/user', userRoutes)
 app.use('/api/goals', goalRoutes )
 app.use('/api/moods', moodRoutes )
-
+app.use('/api/calendar',calendarRoutes)
 app.use("/api/posts", posts);
 app.use("/api/reply", replies);
 

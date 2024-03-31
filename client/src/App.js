@@ -22,6 +22,7 @@ import LoginTherapist from "./pages/loginTherapist.js";
 import { useAuthTherapistContext } from "./hooks/useAuthTherapistContext.js";
 import Posts from "./pages/getPost.js"
 import ViewTherapists from "./pages/viewTherapists.js";
+import Calendar from "./pages/Calendar.js"
 import Messages from "./pages/chatRoom.js";
 // import SideBar from "./components/sideBar.js";
 
@@ -52,7 +53,9 @@ function App() {
          <Route path="/loginTherapist" element={!therapist ? <LoginpageTherapist /> : <Navigate to="/homeTherapist" />}/>
          <Route path="/posts" element={<GetPosts/>}/>
          <Route path="/viewTherapists"element={<ViewTherapists/>}/>
+         <Route path="/calendar" element={<GetCalendar/>}/>
          <Route path="/chatroom" element={<ChattRoom/>}/>
+
        </Routes>
      </BrowserRouter>
    );
@@ -308,6 +311,19 @@ function ProfilePage() {
 
                <div className="contactpg">
                   <Contact/>
+               </div>
+      </div>
+   );
+}
+function GetCalendar() {
+   return (
+      <div>
+         <div className="contactpage">
+                <Navbar/>
+         </div>
+
+               <div className="contactpg">
+                  <Calendar/>
                </div>
       </div>
    );
