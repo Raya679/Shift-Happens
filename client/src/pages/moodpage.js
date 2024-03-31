@@ -5,6 +5,7 @@ import Chart from "chart.js/auto";
 import { LinearScale, CategoryScale } from "chart.js";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
+document.body.style = "background: #e2e8f0";
 Chart.register(LinearScale, CategoryScale);
 
 function Mood() {
@@ -220,11 +221,11 @@ function Mood() {
       </div>
       {showHelpPopup && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <p className="text-xl font-bold mb-4">
+          <div className="bg-white p-8 rounded-lg shadow-md w-96 h-60">
+            <p className="text-xl font-bold mt-12 ml-16">
               Let Us Help You?
             </p>
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-10">
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded-lg mr-4"
                 onClick={handleHelpPopupCancel}

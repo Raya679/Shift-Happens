@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import meditate from '../pictures/medi.gif';
-
+document.body.style = "background: #e2e8f0";
 const MeditationTimer = () => {
     const [remainingTime, setRemainingTime] = useState(0);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
