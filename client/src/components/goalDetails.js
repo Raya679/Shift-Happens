@@ -1,53 +1,59 @@
 import { useGoalContext } from "../hooks/useGoalContext";
 import { useAuthContext } from "../hooks/useAuthContext";
-// import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { FaTrashAlt } from "react-icons/fa";
 
-const GoalDetails = ({goal}) => {
-    const {dispatch} = useGoalContext()
-    const {user} = useAuthContext();
+const GoalDetails = ({ goal }) => {
+  const { dispatch } = useGoalContext();
+  const { user } = useAuthContext();
 
-    const handleClick = async () => {
-        if (!user) {
-            return
-          }
+  const handleClick = async () => {
+    if (!user) return;
 
-        const response = await fetch('/api/goals/' + goal._id, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${user.token}`
-              }
-        });
+    const response = await fetch("/api/goals/" + goal._id, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${user.token}` },
+    });
 
-        const json = await response.json()
-    
-        if (response.ok) {
-            // No need to parse an empty response
-            dispatch({ type: 'DELETE_GOALS', payload: json });
-        } else {
-            // Handle non-successful response (e.g., show an error message)
-            console.error('Error deleting goal:', response.statusText);
-        }
-    };
-    
+    const json = await response.json();
 
-    return (
-        <div>
-            {user && (
-        <div className="w-full flex justify-center m-5 pt-4 goaldesign">
-        <div className='bg-slate-100 p-4 w-1/2 rounded-xl font-medium text-black'>
-            {/* <h4 className="activity-name">Activity name: {goal.activities}</h4> */}
-            <h4>
-                <span className="activity-name ">Activity name:</span> {goal.activities}
-            </h4>
-            <p> <span className="activity-name">Duration (in mins):</span> {goal.duration}</p>
-            <p> <span className="activity-name">Prerequisites: </span>{goal.requirements}</p>
-            {/* <p>{formatDistanceToNow(new Date(goal.createdAt), { addSuffix: true })}</p> */}
-            <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
+    if (response.ok) {
+      dispatch({ type: "DELETE_GOALS", payload: json });
+    } else {
+      console.error("Error deleting goal:", response.statusText);
+    }
+  };
+
+  return (
+    <div>
+      {user && (
+        <div className="w-full flex justify-center p-4">
+          <div className="bg-white p-6 w-96 h-64 rounded-2xl shadow-lg flex flex-col justify-between text-black transform transition duration-300 hover:scale-105">
+            <div>
+              <h4 className="text-xl font-bold text-gray-800 mb-2">
+                {goal.activities}
+              </h4>
+              <p className="text-lg text-gray-600">
+                <span className="font-semibold">Duration:</span> {goal.duration}{" "}
+                mins
+              </p>
+              <p className="text-lg text-gray-600">
+                <span className="font-semibold">Prerequisites:</span>{" "}
+                {goal.requirements}
+              </p>
+            </div>
+
+            {/* Delete Icon */}
+            <div className="flex justify-end">
+              <FaTrashAlt
+                className="text-slate-500 text-3xl cursor-pointer hover:text-slate-600 transition"
+                onClick={handleClick}
+              />
+            </div>
+          </div>
         </div>
-        </div>
-        )}
-        </div>
-    )
-}
+      )}
+    </div>
+  );
+};
 
-export default GoalDetails
+export default GoalDetails;

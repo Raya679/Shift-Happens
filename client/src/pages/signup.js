@@ -1,66 +1,87 @@
-// import logo from '../pictures/logo.png'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSignup } from "../hooks/useSignup";
-// import img4 from '../pictures/img8.png'
+import bg from "../pictures/duplo24.jpeg";
+import Navbar from "../components/navbar";
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setName] = useState("");
+  const { signup, error, isLoading } = useSignup();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [username, setName]=useState('');
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
-    const{signup, error, isLoading} = useSignup()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await signup(email, username, password);
+    console.log(password, username, email);
+  };
 
-    // function validateForm() {
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${bg})` }}
+    >
+      <div className="w-full mt-16 max-w-lg p-8 bg-white bg-opacity-90 rounded-lg shadow-2xl shadow-slate-600">
+        <h1 className="text-4xl font-bold text-slate-900 mb-2 text-center">
+          Shift Happens
+        </h1>
+        <h2 className="text-xl  text-slate-800 mb-6 text-center">
+          User Sign-up
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+            onChange={(e) => setName(e.target.value)}
+            value={username}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="example@gmail.com"
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+          />
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 text-white bg-slate-800 hover:bg-gray-700 rounded-lg font-semibold"
+          >
+            Sign Up
+          </button>
+          {error && (
+            <div className="text-red-500 text-center mt-2">{error}</div>
+          )}
+          <div className="text-center mt-4 space-y-2">
+            <a href="/login" className="text-gray-600 hover:underline">
+              Already have an account?
+            </a>
+            <br />
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
-    //     return email.length > 0 && password.length > 0;   
-    //   }
-    document.body.style = 'background: #A9A9A9';
-    const handleSubmit = async (e) => {
-
-        e.preventDefault();   
-        await signup(email, username, password);
-        console.log(password, username ,email );
-      };
-
-    return ( 
-        <div className="signupdiv">
-            <div className="img4">
-                {/* <img src={img4} width={500} height={800}/> */}
-            </div>
-        <div className="signup">
-            {/* <img src={logo} width={70} height={50}/> */}
-            <h2>Shift Happens</h2>
-            {/* <span role="img" aria-label="rocket">🚀</span> */}
-            <form onSubmit = {handleSubmit}>
-                <label>Username:</label>
-                <input type="text" required
-                value={username}
-                onChange={(e) => setName(e.target.value)}
-                />
-                <label>Email: </label>
-                <input type="email" required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                />
-                <pre>
-                    <label>Password:</label>
-                    <input type="password" required 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    />
-                </pre>
-
-                {/* <button disabled={!validateForm()}>Submit</button> */}
-                <button disabled={isLoading}>Submit</button>
-                {error && <div className="error">{error}</div>}
-                <pre></pre>
-                <a href = "/login">Already have an account?</a>
-                <a href = "/signupTherapist">Are you a therapist?</a>
-            </form>
-        </div>
-        </div>
-     );
-}
- 
 export default Signup;

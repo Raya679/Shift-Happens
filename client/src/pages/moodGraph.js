@@ -4,20 +4,19 @@ import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { LinearScale, CategoryScale } from "chart.js";
 import { useAuthContext } from "../hooks/useAuthContext";
-// import { format } from "date-fns";
+
 Chart.register(LinearScale, CategoryScale);
 
 function MoodGraph() {
   const { user } = useAuthContext();
   const [moodsData, setMoodsData] = useState([]);
+
   useEffect(() => {
     const fetchMoods = async () => {
       try {
         if (user && user.token) {
           const response = await axios.get("/api/moods", {
-            headers: {
-              'Authorization': `Bearer ${user.token}`,
-            }
+            headers: { Authorization: `Bearer ${user.token}` },
           });
           setMoodsData(response.data);
         }
@@ -27,43 +26,104 @@ function MoodGraph() {
     };
     fetchMoods();
   }, [user]);
+
   const moodssData = moodsData.map((mood) => mood.moodss);
   const sleepData = moodsData.map((mood) => mood.sleep);
   const stressData = moodsData.map((mood) => mood.stress);
-//   const labels = moodsData.map((mood) => mood.createdAt);
-const labels = moodsData.map((mood) => new Date(mood.createdAt).toLocaleDateString());
+  const labels = moodsData
+    .map((mood) => {
+      const date = new Date(mood.createdAt);
+      return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+    })
+    .reverse();
 
-//   console.log("Labels array:", labels);
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Mood Rating",
+        data: moodssData.slice().reverse(),
+        fill: false,
+        borderColor: "#4BC0C0",
+        tension: 0.1,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+      {
+        label: "Sleep Hours",
+        data: sleepData.slice().reverse(),
+        fill: false,
+        borderColor: "#FF6384",
+        tension: 0.1,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+      {
+        label: "Stress Level",
+        data: stressData.slice().reverse(),
+        fill: false,
+        borderColor: "#9966FF",
+        tension: 0.1,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+    ],
+  };
 
-const data = {
-  labels: labels,
-  datasets: [
-    {
-      label: "Mood Rating",
-      data: moodssData.slice().reverse(), // Reverse the mood rating data
-      fill: false,
-      borderColor: "rgb(75, 192, 192)",
-      tension: 0.1,
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          font: {
+            size: 14,
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function(tooltipItem) {
+            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+          },
+        },
+      },
     },
-    {
-      label: "Sleep Hours",
-      data: sleepData.slice().reverse(), // Reverse the sleep hours data
-      fill: false,
-      borderColor: "rgb(255, 99, 132)",
-      tension: 0.1,
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Rating",
+          font: {
+            size: 16,
+          },
+        },
+        ticks: {
+          stepSize: 1,
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "Date",
+          font: {
+            size: 16,
+          },
+        },
+      },
     },
-    {
-      label: "Stress Level",
-      data: stressData.slice().reverse(), // Reverse the stress level data
-      fill: false,
-      borderColor: "rgb(153, 102, 255)",
-      tension: 0.1,
-    },
-  ],
-};
-return (
-  <div className="mx-20 my-28 bg-slate-300" style={{ maxWidth: "80%" }} >
-    <Line data={data}  />
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6 mt-10">
+      <h3 className="text-2xl font-semibold mb-4 text-gray-800 text-center">
+        Mood Statistics
+      </h3>
+      <Line data={data} options={options} />
     </div>
   );
 }

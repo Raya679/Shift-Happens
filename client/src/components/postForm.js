@@ -13,7 +13,8 @@ const PostForm = () => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
-  const [creatingPost, setCreatingPost] = useState(false); // State for tracking if user wants to create a post
+  const [modalOpen, setModalOpen] = useState(false);
+  // const [creatingPost, setCreatingPost] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,72 +38,94 @@ const PostForm = () => {
     const json = await response.json();
 
     if (!response.ok) {
-      console.log("Error");
       setError(json.error);
       setEmptyFields(json.emptyFields);
     } else {
-      console.log("Hello");
       setError(null);
       setTitle("");
       setDescription("");
       setEmptyFields([]);
       dispatch({ type: "CREATE_POSTS", payload: json });
+      setModalOpen(false);
     }
   };
 
   const handleCreatePostClick = () => {
-    setCreatingPost(true); // Set the state to indicate user wants to create a post
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setTitle("");
+    setDescription("");
+    setError(null);
+    setEmptyFields([]);
   };
 
   return (
     <div className="flex justify-center m-10">
-      <div className="h-full w-3/4 bg-slate-100 rounded-3xl p-10">
-        {/* Conditionally render the form based on creatingPost state */}
-        {creatingPost ? (
-          <form onSubmit={handleSubmit} className="grid grid-cols-1">
-            <h3 className="font-serif text-center font-extrabold text-3xl">
+      <div className="h-full w-3/4 bg-white rounded-3xl shadow-lg p-10">
+        <div className="flex justify-center">
+          <button
+            className="bg-pink-500 hover:bg-pink-600 transition duration-200 w-36 p-3 rounded-md text-white font-bold shadow-md"
+            onClick={handleCreatePostClick}
+          >
+            Share Your Thoughts!!
+          </button>
+        </div>
+      </div>
+
+      {modalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-3xl shadow-lg p-10 w-1/2 relative">
+            <button
+              className="absolute top-3 right-7 text-gray-500 hover:text-gray-800 text-2xl"
+              onClick={closeModal}
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
+
+            <h3 className="font-serif text-center font-extrabold text-3xl text-gray-800">
               Create New Post
             </h3>
-            <br></br>
-            <label className="text-2xl">Title: </label>
-            <input
-              type="text"
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
-              className={`border-2 border-slate-500 rounded-xl pl-5 pr-3 h-16 w-1/2 ${
-                emptyFields.includes("description") ? "error" : ""
-              }`}
-            />
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
+              <label className="text-xl text-gray-600">Title:</label>
+              <input
+                type="text"
+                onChange={(e) => setTitle(e.target.value)}
+                value={title}
+                className={`border-2 border-gray-400 rounded-xl p-4 h-16 w-full focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200 ${
+                  emptyFields.includes("title") ? "border-red-500" : ""
+                }`}
+                placeholder="Enter post title"
+                required
+              />
 
-            <br></br>
-            <label className="text-2xl">Description: </label>
-            <textarea
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-              className={`border-2 border-slate-500 m-2 rounded-xl overflow-y-scroll overflow-x-hidden h-32 w-4/5 ${
-                emptyFields.includes("description") ? "error" : ""
-              }`}
-            />
+              <label className="text-xl text-gray-600">Description:</label>
+              <textarea
+                onChange={(e) => setDescription(e.target.value)}
+                value={description}
+                className={`border-2 border-gray-400 rounded-xl p-4 h-32 w-full focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200 ml-0 ${
+                  emptyFields.includes("description") ? "border-red-500" : ""
+                }`}
+                style={{ fontWeight: "normal" }}
+                placeholder="Write your post description"
+                required
+              />
 
-            <br></br>
-            <div className="w-full flex justify-center">
-              <button className="bg-slate-500 hover:bg-slate-800 w-36 p-3 rounded-md text-center text-white">
-                Add Post
-              </button>
-            </div>
-            {error && <div className="error">{error}</div>}
-          </form>
-        ) : (
-          <div className="flex justify-center">
-            <button
-              className="bg-slate-500 hover:bg-slate-800 w-36 p-3 rounded-md text-center text-white"
-              onClick={handleCreatePostClick} // Handle button click to create post
-            >
-              Share Your Thoughts!!
-            </button>
+              <div className="w-full flex justify-center">
+                <button className="bg-pink-500 hover:bg-pink-600 transition duration-200 w-36 p-3 rounded-md text-white font-bold shadow-md">
+                  Add Post
+                </button>
+              </div>
+              {error && (
+                <div className="text-red-500 text-center mt-2">{error}</div>
+              )}
+            </form>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,9 +1,9 @@
-const {Post,validatePost} = require("../models/postModel");
+const { Post, validatePost } = require("../models/postModel");
 const _ = require("lodash");
 
 const getPosts = async (req, res) => {
-   const allPosts = await Post.find().sort({time: -1})
-   res.status(200).json(allPosts)
+  const allPosts = await Post.find().sort({ time: -1 });
+  res.status(200).json(allPosts);
 };
 
 const getPost = async (req, res) => {
@@ -22,7 +22,6 @@ const getPost = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-
   const { error } = validatePost(req.body);
   const post = new Post({
     title: req.body.title,
@@ -32,7 +31,7 @@ const createPost = async (req, res) => {
   });
   try {
     await post.save();
-    res.status(200).json(post)
+    res.status(200).json(post);
   } catch (err) {
     console.log("error: ", err);
   }
@@ -41,7 +40,7 @@ const createPost = async (req, res) => {
 const likePost = async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) return res.status(400).send("Post doesn't exists");
-  // if (post.author == req.user._id)
+  //   if (post.author == req.user._id)
   //   return res.status(400).send("You can't upvote your own post");
   const upvoteArray = post.upvotes;
   const index = upvoteArray.indexOf(req.user._id);
@@ -56,7 +55,7 @@ const likePost = async (req, res) => {
     "author",
     "name username"
   );
-  res.status(200).json(post)
+  res.status(200).json(post);
 };
 
-module.exports = {getPost, getPosts, createPost, likePost}
+module.exports = { getPost, getPosts, createPost, likePost };

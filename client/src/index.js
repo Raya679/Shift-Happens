@@ -5,21 +5,16 @@ import App from "./App";
 import { AuthContextProvider } from "./context/Authcontext";
 import { GoalContextProvider } from "./context/goalContext";
 import { PostContextProvider } from "./context/postContext";
-import { ChatContextProvider } from "./context/chatRoomContext";
-import { AuthTherapistContextProvider } from "./context/authTherapistContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <AuthTherapistContextProvider>
-        <PostContextProvider>
-          <ChatContextProvider>
-            <GoalContextProvider>
-              <App />
-            </GoalContextProvider>
-          </ChatContextProvider>
-        </PostContextProvider>
-      </AuthTherapistContextProvider>
+      <PostContextProvider>
+        <GoalContextProvider>
+          <App />
+        </GoalContextProvider>
+      </PostContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

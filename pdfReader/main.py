@@ -1,74 +1,111 @@
-import torch
+import google.generativeai as genai
+import chromadb
 import numpy as np
-from sentence_transformers import SentenceTransformer, util
-from langchain.text_splitter import CharacterTextSplitter
-from bs4 import BeautifulSoup
-import requests
-from PyPDF2 import PdfReader
+import os
+import PyPDF2
+import torch
+import uuid
+from dotenv import load_dotenv
+
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY is not set in the environment variables.")
+
+genai.configure(api_key=GEMINI_API_KEY)
+
+pdf_path = "./dataset.pdf"
+embedding_file = "output_embedding.pt"
+embedding_dim = 384
+
+projection_matrix = np.random.randn(768, embedding_dim)
+projection_matrix /= np.linalg.norm(projection_matrix, axis=0)
+
+db_path = f"/content/chroma_db_{uuid.uuid4().hex[:8]}" if os.path.exists("/content") else f"./chroma_db_{uuid.uuid4().hex[:8]}"
+os.makedirs(db_path, exist_ok=True)
+print(f"Using ChromaDB path: {db_path}")
 
 try:
-    pdf = PdfReader('./dataset.pdf')  
-    result = ''
-    for i in range(len(pdf.pages)):
-        result += pdf.pages[i].extract_text()
+    chroma_client = chromadb.PersistentClient(path=db_path)
+    collection = chroma_client.get_or_create_collection(
+        name="mental_health_chunks",
+        metadata={"hnsw:space": "cosine", "dimension": embedding_dim}
+    )
 except Exception as e:
-    print('Error:', e)
-    exit(0)
+    print(f"ChromaDB initialization failed: {e}")
+    raise
 
-text_splitter = CharacterTextSplitter(
-    separator="\n",
-    chunk_size=1000,
-    chunk_overlap=200,
-    length_function=len
-)
-chunks = text_splitter.split_text(result)
+def process_pdf(pdf_path):
+    if not os.path.exists(pdf_path):
+        raise FileNotFoundError(f"PDF not found at {pdf_path}")
+    with open(pdf_path, "rb") as file:
+        pdf_reader = PyPDF2.PdfReader(file)
+        text = "".join(page.extract_text() or "" for page in pdf_reader.pages)
+    chunks = [text[i:i + 500].strip() for i in range(0, len(text), 500) if text[i:i + 500].strip()]
+    if not chunks:
+        raise ValueError("No valid text extracted from PDF.")
+    print(f"Document split into {len(chunks)} chunks.")
+    return chunks
 
-model = SentenceTransformer("sentence_transformer_model")
-AI21_api_key = '<Enter API Key>' 
-url = "https://api.ai21.com/studio/v1/answer"
+def generate_embeddings(chunks, model, projection_matrix):
+    embedding_data = {}
+    for i, chunk in enumerate(chunks):
+        try:
+            response = genai.embed_content(model=model, content=chunk, task_type="retrieval_document")
+            embedding_768 = np.array(response["embedding"])
+            embedding_384 = np.dot(embedding_768, projection_matrix)
+            embedding_data[str(i)] = {"embedding": embedding_384.tolist(), "text": chunk}
+        except Exception as e:
+            print(f"Error embedding chunk {i}: {e}")
+    return embedding_data
 
-def query(texts):
-    embeddings = model.encode(texts)
-    return embeddings
+model = "models/text-embedding-004"
+if os.path.exists(embedding_file):
+    embedding_data = torch.load(embedding_file, weights_only=False)
+else:
+    chunks = process_pdf(pdf_path)
+    embedding_data = generate_embeddings(chunks, model, projection_matrix)
+    torch.save(embedding_data, embedding_file)
 
-def get_output_embedding(chunks):
+first_embedding = list(embedding_data.values())[0]["embedding"]
+if len(first_embedding) != embedding_dim:
+    raise ValueError(f"Embedding dimension {len(first_embedding)} != {embedding_dim}")
+
+for i, data in embedding_data.items():
     try:
-        output_embedding = torch.load('output_embedding.pt')
-    except FileNotFoundError:
-        output_embedding = query(chunks)
-        torch.save(output_embedding, 'output_embedding.pt')
-    return output_embedding
+        collection.add(
+            ids=[str(i)],
+            embeddings=[data["embedding"]],
+            metadatas=[{"text": data["text"]}]
+        )
+    except Exception as e:
+        print(f"Error adding chunk {i} to ChromaDB: {e}")
+        raise
 
-def get_response_from_query(user_query):
-    question_embedding = query([user_query])
-    output_embedding = get_output_embedding(chunks)
-    result = util.semantic_search(question_embedding, output_embedding, top_k=2)
-    final = [chunks[result[0][i]['corpus_id']] for i in range(len(result[0]))]
-
-    payload = {
-        "context": ' '.join(final),
-        "question": user_query
-    }
-    
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "Authorization": f"Bearer {AI21_api_key}"
-    }
-
-    response = requests.post(url, json=payload, headers=headers)
-    print("Response", response)
-   
-    if response.json()['answerInContext']:
-        return response.json()['answer']
-    else:
-        print('The answer is not found in the document ⚠️, '
-              'please reformulate your question.')
-    
-# user_query = "I am sad. What should I do?"
-# print(get_response_from_query(user_query))
+def query_rag(query):
+    try:
+        query_response = genai.embed_content(model=model, content=query, task_type="retrieval_document")
+        query_embedding = np.array(query_response["embedding"])
+        if np.isnan(query_embedding).any() or np.all(query_embedding == 0):
+            raise ValueError("Invalid query embedding.")
+        query_embedding_reduced = np.dot(query_embedding, projection_matrix)
+        results = collection.query(query_embeddings=[query_embedding_reduced.tolist()], n_results=3)
+        if not results["metadatas"] or not results["metadatas"][0]:
+            return "I couldn’t find specific advice. How else can I support you?"
+        context = " ".join(doc["text"] for doc in results["metadatas"][0])
+        gen_model = genai.GenerativeModel("gemini-1.5-flash")
+        prompt = (
+            "You are a compassionate mental health assistant. Answer based on the context, "
+            "offering empathy and practical advice. For severe distress (e.g., self-harm), "
+            "suggest professional help.\n\n"
+            f"Context: {context}\n\nQuestion: {query}"
+        )
+        response = gen_model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        return f"Sorry, an error occurred: {e}. How else can I assist?"
 
 
-
-
-
+# response = query_rag("I am very sad.")
+# print("Chatbot:", response)
