@@ -12,5 +12,6 @@ router.post('/add', createGoal)
 router.get('/:id', getGoal)
 router.get('/', getGoals)
 router.delete('/:id', deleteGoal)
+// router.patch('/done/:id', markGoalAsDone);
 
 module.exports = router

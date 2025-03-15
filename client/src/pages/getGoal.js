@@ -22,7 +22,9 @@ const Goals = () => {
         }
       }
     };
-    fetchGoals();
+    if(user){
+      fetchGoals()
+    }
   }, [user, dispatch]);
 
   return (

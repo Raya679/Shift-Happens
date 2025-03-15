@@ -1,6 +1,7 @@
 import { useGoalContext } from "../hooks/useGoalContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { FaTrashAlt } from "react-icons/fa";
+import { format } from "date-fns"; 
 
 const GoalDetails = ({ goal }) => {
   const { dispatch } = useGoalContext();
@@ -40,6 +41,12 @@ const GoalDetails = ({ goal }) => {
                 <span className="font-semibold">Prerequisites:</span>{" "}
                 {goal.requirements}
               </p>
+              {goal.deadline && (
+                <p className="text-lg text-gray-600">
+                    <span className="font-semibold">Deadline:</span> 
+                    {format(new Date(goal.deadline), 'PPP')}
+                </p>
+              )}
             </div>
 
             {/* Delete Icon */}

@@ -18,13 +18,16 @@ const goalSchema = new Schema(
       type: String,
     },
 
+    deadline: {  
+      type: Date,
+      required: true
+    },
+    
     user_id: {
       type: String,
       required: true,
     },
-  },
-  { timestamps: true }
-);
+  },{ timestamps: true });
 
 const Goals = new mongoose.model("Goals", goalSchema);
 module.exports = Goals;

@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import MoodGraph from "./moodGraph";
 import SideBar from "../components/sidebar";
 import bg from "../pictures/duplo24.jpeg";
+import { FaTrashAlt } from "react-icons/fa";
+import { format } from "date-fns";
 
 document.body.style = "background: #f0f4f8";
 
@@ -27,6 +29,50 @@ const HomeAfter = () => {
       fetchGoals();
     }
   }, [dispatch, user]);
+
+  const upcomingGoals = goals
+    ? goals.filter(goal => {
+        if (!goal.deadline) return false;
+        const goalDate = new Date(goal.deadline);
+        const today = new Date();
+        const nextWeek = new Date();
+        nextWeek.setDate(today.getDate() + 7);
+        return goalDate >= today && goalDate <= nextWeek;
+      })
+    : [];
+  
+  const handleDelete = async (goalId) => {
+    console.log(`Delete clicked for goal ID: ${goalId}`);
+  
+    try {
+      const response = await fetch(`/api/goals/${goalId}`, {
+        method: "DELETE",
+        headers: { 
+          "Authorization": `Bearer ${user.token}`,
+          "Content-Type": "application/json"
+        },
+      });
+  
+      if (!response.ok) {
+        const json = await response.json();
+        console.error("Delete failed:", json.error);
+        return;
+      }
+  
+      console.log(`Goal ${goalId} deleted successfully`);
+  
+      dispatch({ 
+        type: "SET_GOALS", 
+        payload: [...goals.filter(goal => goal._id !== goalId)] 
+      });
+  
+    } catch (error) {
+      console.error("Error deleting goal:", error);
+    }
+  };
+  
+
+
 
   return (
     <div
@@ -63,33 +109,55 @@ const HomeAfter = () => {
             </div>
 
             <h3 className="text-2xl font-semibold mt-16 mb-4 text-gray-800 text-center">
-              MY GOALS
+              UPCOMING GOALS
             </h3>
             <div className="flex flex-col items-center">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                {goals && goals.length > 0 ? (
-                  goals.map((goal) => (
+                {goals && upcomingGoals.length > 0? (
+                  upcomingGoals
+                  .filter(goal => !goal.completed)
+                  .map((goal) => (
                     <div
                       className="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105"
                       key={goal._id}
                     >
-                      <h4 className="font-semibold text-lg text-gray-800 mb-2">
-                        Activity:{" "}
-                        <span className="font-medium">{goal.activities}</span>
-                      </h4>
-                      <p className="text-gray-700 mb-1">
-                        <strong>Duration:</strong> {goal.duration} mins
-                      </p>
-                      <p className="text-gray-700 mb-4">
-                        <strong>Prerequisites:</strong> {goal.requirements}
-                      </p>
+
+                      <div>
+                        <h4 className="text-xl font-bold text-gray-800 mb-2">
+                          {goal.activities}
+                        </h4>
+
+                        <p className="text-lg text-gray-600">
+                          <span className="font-semibold">Duration:</span> {goal.duration} mins
+                        </p>
+
+                        <p className="text-lg text-gray-600">
+                          <span className="font-semibold">Prerequisites:</span> {goal.requirements}
+                        </p>
+
+                        {goal.deadline && (
+                          <p className="text-lg text-gray-600">
+                            <span className="font-semibold">Deadline:</span> {format(new Date(goal.deadline), 'PPP')}
+                          </p>
+                        )}
+
+                        <div className="flex justify-end">
+                          <button onClick={() => handleDelete(goal._id)} className="focus:outline-none">
+                            <FaTrashAlt className="text-slate-500 text-3xl cursor-pointer hover:text-slate-600 transition" />
+                          </button>
+                        </div>
+
+                      </div>
+                                  
                     </div>
                   ))
                 ) : (
                   <div className="col-span-full text-center text-gray-600">
-                    <p>No goals added yet</p>
+                    <p>No upcoming goals</p>
                   </div>
+                  
                 )}
+                
               </div>
             </div>
 
@@ -103,7 +171,7 @@ const HomeAfter = () => {
               <MoodGraph />
             </div>
 
-            <div className="absolute inset-0 bg-gray-300 opacity-10 rounded-lg"></div>
+            {/* <div className="absolute inset-0 bg-gray-300 opacity-10 rounded-lg"></div> */}
           </div>
         </>
       )}

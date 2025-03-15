@@ -10,6 +10,7 @@ const GoalForm = () => {
   const [duration, setDuration] = useState("");
   const [requirements, setRequirements] = useState("");
   const [error, setError] = useState(null);
+  const [deadline, setDeadline] = useState("");
   const [emptyFields, setEmptyFields] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -19,8 +20,8 @@ const GoalForm = () => {
       setError("You must be logged in");
       return;
     }
-
-    const goal = { activities, duration, requirements };
+    const formattedDeadline = deadline ? new Date(deadline).toISOString() : null;
+    const goal = {activities, duration, requirements, deadline: formattedDeadline};
 
     const response = await fetch("/api/goals/add", {
       method: "POST",
@@ -44,6 +45,7 @@ const GoalForm = () => {
       setActivities("");
       setDuration("");
       setRequirements("");
+      setDeadline("");
       dispatch({ type: "CREATE_GOALS", payload: json });
     }
   };
@@ -103,6 +105,22 @@ const GoalForm = () => {
             }`}
             placeholder="Enter prerequisites"
           />
+        </div>
+
+        <div>
+        <label htmlFor="deadline" className="text-gray-700 font-medium">Deadline:</label>
+            <input 
+                type="date"
+                id="deadline"
+                onChange={(e) => setDeadline(e.target.value)}
+                value={deadline}
+                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black ${
+                  emptyFields.includes("deadline")
+                    ? "border-red-500"
+                    : "border-gray-300"
+                }`}
+                // placeholder="Enter deadline"
+            />
         </div>
 
         <div className="flex justify-center">
