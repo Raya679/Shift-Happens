@@ -111,7 +111,7 @@ const MeditationTimer = () => {
 
           {isTimerRunning && (
             <div className="text-center mt-4">
-              <div className="text-4xl font-bold mb-9 text-white font-serif">
+              <div className="text-4xl font-bold mb-9 text-slate-900 font-serif">
                 Remaining Time - {formatTime(remainingTime)}
               </div>
 
