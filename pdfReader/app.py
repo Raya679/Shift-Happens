@@ -23,7 +23,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the Neurobagel Query Tool AI API"}
+    return {"message": "Welcome to Shift Happens"}
 
 @app.post("/answer_query/")
 async def answer_query(request: QueryRequest):
