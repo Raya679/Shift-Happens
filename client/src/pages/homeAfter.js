@@ -31,15 +31,26 @@ const HomeAfter = () => {
   }, [dispatch, user]);
 
   const upcomingGoals = goals
-    ? goals.filter(goal => {
-        if (!goal.deadline) return false;
-        const goalDate = new Date(goal.deadline);
-        const today = new Date();
-        const nextWeek = new Date();
-        nextWeek.setDate(today.getDate() + 7);
-        return goalDate >= today && goalDate <= nextWeek;
-      })
-    : [];
+  ? goals.filter(goal => {
+      const hasHighImportance = goal.importance >= 5;
+
+      if (!goal.deadline) {
+        return hasHighImportance;
+      }
+
+      const goalDate = new Date(goal.deadline);
+      const today = new Date();
+      const nextWeek = new Date();
+      nextWeek.setDate(today.getDate() + 7);
+
+      const hasNearDeadline = goalDate >= today && goalDate <= nextWeek;
+
+      return hasHighImportance && hasNearDeadline;
+    })
+    .slice(0, 3)
+  : [];
+
+
   
   const handleDelete = async (goalId) => {
     console.log(`Delete clicked for goal ID: ${goalId}`);
@@ -113,43 +124,46 @@ const HomeAfter = () => {
             </h3>
             <div className="flex flex-col items-center">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                {goals && upcomingGoals.length > 0? (
-                  upcomingGoals
-                  .filter(goal => !goal.completed)
-                  .map((goal) => (
-                    <div
-                      className="bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105"
-                      key={goal._id}
-                    >
+                {goals && upcomingGoals.length > 0? (       
+                  upcomingGoals.map((goal) => (
+                    <div className="w-full flex justify-center p-4">
+                      <div 
+                        className="bg-white p-6 w-96 h-64 rounded-2xl shadow-lg flex flex-col justify-between text-black transform transition duration-300 hover:scale-105"
+                        key={goal._id}
+                      >
+                        <div>
+                          <h4 className="text-xl font-bold text-gray-800 mb-2">
+                            {goal.activities}
+                          </h4>
 
-                      <div>
-                        <h4 className="text-xl font-bold text-gray-800 mb-2">
-                          {goal.activities}
-                        </h4>
-
-                        <p className="text-lg text-gray-600">
-                          <span className="font-semibold">Duration:</span> {goal.duration} mins
-                        </p>
-
-                        <p className="text-lg text-gray-600">
-                          <span className="font-semibold">Prerequisites:</span> {goal.requirements}
-                        </p>
-
-                        {goal.deadline && (
                           <p className="text-lg text-gray-600">
-                            <span className="font-semibold">Deadline:</span> {format(new Date(goal.deadline), 'PPP')}
+                            <span className="font-semibold">Duration:</span> {goal.duration} mins
                           </p>
-                        )}
 
+                          <p className="text-lg text-gray-600">
+                            <span className="font-semibold">Prerequisites:</span>{" "}
+                            {goal.requirements ? goal.requirements : "--"}
+                          </p>  
+
+                          <p className="text-lg text-gray-600">
+                            <span className="font-semibold">Deadline: </span> 
+                            {goal.deadline ? format(new Date(goal.deadline), 'PPP') : " --"}
+                          </p>  
+
+                          <p className="text-lg text-gray-600">
+                            <span className="font-semibold">Importance:</span> {goal.importance}
+                          </p>
+                        </div>
+                     
                         <div className="flex justify-end">
                           <button onClick={() => handleDelete(goal._id)} className="focus:outline-none">
                             <FaTrashAlt className="text-slate-500 text-3xl cursor-pointer hover:text-slate-600 transition" />
                           </button>
                         </div>
-
                       </div>
-                                  
                     </div>
+
+
                   ))
                 ) : (
                   <div className="col-span-full text-center text-gray-600">

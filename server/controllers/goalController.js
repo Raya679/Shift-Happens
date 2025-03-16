@@ -24,7 +24,7 @@ const getGoal = async (req, res) => {
 };
 
 const createGoal = async (req, res) => {
-  const { activities, duration, requirements, deadline} = req.body;
+  const { activities, duration, requirements, deadline, importance} = req.body;
 
   let emptyFields = [];
 
@@ -44,6 +44,10 @@ const createGoal = async (req, res) => {
   //   emptyFields.push('deadline');
   // }
 
+  if (!importance) {
+    emptyFields.push('importance');
+  }
+
   if (emptyFields.length > 0) {
     return res
       .status(400)
@@ -58,6 +62,7 @@ const createGoal = async (req, res) => {
       duration,
       requirements: requirements || null,
       deadline: deadline || null,
+      importance,
       user_id,
     });
     // const token = createToken(data._id)

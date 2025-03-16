@@ -37,18 +37,18 @@ const GoalDetails = ({ goal }) => {
                 <span className="font-semibold">Duration:</span> {goal.duration}{" "}
                 mins
               </p>
-              {goal.requirements && (
-                <p className="text-lg text-gray-600">
-                  <span className="font-semibold">Prerequisites:</span>{" "}
-                  {goal.requirements}
-                </p>
-              )}              
-              {goal.deadline && (
-                <p className="text-lg text-gray-600">
-                  <span className="font-semibold">Deadline:</span> 
-                  {format(new Date(goal.deadline), 'PPP')}
-                </p>
-              )}
+              <p className="text-lg text-gray-600">
+                <span className="font-semibold">Prerequisites:</span>{" "}
+                {goal.requirements ? goal.requirements : "--"}
+              </p>         
+              <p className="text-lg text-gray-600">
+                <span className="font-semibold">Deadline:</span> 
+                {goal.deadline ? format(new Date(goal.deadline), 'PPP') : " --"}
+              </p>      
+              <p className="text-lg text-gray-600">
+                  <span className="font-semibold">Importance:</span>{" "}
+                  {goal.importance}
+              </p>
             </div>
 
             {/* Delete Icon */}

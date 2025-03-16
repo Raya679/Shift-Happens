@@ -22,11 +22,19 @@ const goalSchema = new Schema(
       type: Date,
       // required: true
     },
+
+    importance: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 10,
+    },
     
     user_id: {
       type: String,
       required: true,
     },
+    
   },{ timestamps: true });
 
 const Goals = new mongoose.model("Goals", goalSchema);

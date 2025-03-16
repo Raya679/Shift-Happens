@@ -11,6 +11,7 @@ const GoalForm = () => {
   const [requirements, setRequirements] = useState("");
   const [error, setError] = useState(null);
   const [deadline, setDeadline] = useState("");
+  const [importance, setImportance] = useState("");
   const [emptyFields, setEmptyFields] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -21,7 +22,7 @@ const GoalForm = () => {
       return;
     }
     const formattedDeadline = deadline ? new Date(deadline).toISOString() : null;
-    const goal = {activities, duration, requirements, deadline: formattedDeadline};
+    const goal = {activities, duration, requirements, deadline: formattedDeadline, importance};
 
     const response = await fetch("/api/goals/add", {
       method: "POST",
@@ -46,6 +47,7 @@ const GoalForm = () => {
       setDuration("");
       setRequirements("");
       setDeadline("");
+      setImportance("");
       dispatch({ type: "CREATE_GOALS", payload: json });
     }
   };
@@ -54,7 +56,7 @@ const GoalForm = () => {
     <div className="w-full max-w-md bg-white shadow-xl rounded-3xl p-8">
       <form onSubmit={handleSubmit} className="grid gap-4">
         <div>
-          <label htmlFor="activityName" className="text-gray-700 font-medium">
+          <label htmlFor="activityName" className="text-gray-700 font-semibold text-xl">
             Activity Name:
           </label>
           <input
@@ -72,7 +74,7 @@ const GoalForm = () => {
         </div>
 
         <div>
-          <label htmlFor="duration" className="text-gray-700 font-medium">
+          <label htmlFor="duration" className="text-gray-700 font-semibold text-xl">
             Duration (in mins):
           </label>
           <input
@@ -90,7 +92,7 @@ const GoalForm = () => {
         </div>
 
         <div>
-          <label htmlFor="prerequisite" className="text-gray-700 font-medium">
+          <label htmlFor="prerequisite" className="text-gray-700 font-semibold text-xl">
             Prerequisite:
           </label>
           <input
@@ -108,19 +110,39 @@ const GoalForm = () => {
         </div>
 
         <div>
-        <label htmlFor="deadline" className="text-gray-700 font-medium">Deadline:</label>
+        <label htmlFor="deadline" className="text-gray-700 font-semibold text-xl">Deadline:</label>
             <input 
                 type="date"
                 id="deadline"
                 onChange={(e) => setDeadline(e.target.value)}
                 value={deadline}
-                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black ${
+                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-400 ${
                   emptyFields.includes("deadline")
                     ? "border-red-500"
                     : "border-gray-300"
                 }`}
                 // placeholder="Enter deadline"
             />
+        </div>
+
+        <div>
+          <label htmlFor="importance" className="text-gray-700 font-semibold text-xl">Importance:</label>
+          <select
+            // type="number"
+            // id="importance"
+            onChange={(e) => setImportance(e.target.value)}
+            value={importance}
+            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-black ${
+              emptyFields.includes("importance") ? "border-red-500" : "border-gray-300"
+            }`}
+          >
+            <option value="">Rate it on a scale of 10</option>
+            {[...Array(10)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex justify-center">
