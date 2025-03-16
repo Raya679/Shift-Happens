@@ -36,13 +36,13 @@ const createGoal = async (req, res) => {
     emptyFields.push("duration");
   }
 
-  if (!requirements) {
-    emptyFields.push("requirements");
-  }
+  // if (!requirements) {
+  //   emptyFields.push("requirements");
+  // }
 
-  if (!deadline) {
-    emptyFields.push('deadline');
-  }
+  // if (!deadline) {
+  //   emptyFields.push('deadline');
+  // }
 
   if (emptyFields.length > 0) {
     return res
@@ -56,8 +56,8 @@ const createGoal = async (req, res) => {
     const goal = await Goals.create({
       activities,
       duration,
-      requirements,
-      deadline,
+      requirements: requirements || null,
+      deadline: deadline || null,
       user_id,
     });
     // const token = createToken(data._id)

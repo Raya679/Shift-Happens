@@ -37,14 +37,16 @@ const GoalDetails = ({ goal }) => {
                 <span className="font-semibold">Duration:</span> {goal.duration}{" "}
                 mins
               </p>
-              <p className="text-lg text-gray-600">
-                <span className="font-semibold">Prerequisites:</span>{" "}
-                {goal.requirements}
-              </p>
+              {goal.requirements && (
+                <p className="text-lg text-gray-600">
+                  <span className="font-semibold">Prerequisites:</span>{" "}
+                  {goal.requirements}
+                </p>
+              )}              
               {goal.deadline && (
                 <p className="text-lg text-gray-600">
-                    <span className="font-semibold">Deadline:</span> 
-                    {format(new Date(goal.deadline), 'PPP')}
+                  <span className="font-semibold">Deadline:</span> 
+                  {format(new Date(goal.deadline), 'PPP')}
                 </p>
               )}
             </div>

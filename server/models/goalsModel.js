@@ -20,7 +20,7 @@ const goalSchema = new Schema(
 
     deadline: {  
       type: Date,
-      required: true
+      // required: true
     },
     
     user_id: {
