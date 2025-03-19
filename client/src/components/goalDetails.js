@@ -37,16 +37,16 @@ const GoalDetails = ({ goal }) => {
                 <span className="font-semibold">Duration:</span> {goal.duration}{" "}
                 mins
               </p>
-              <p className="text-lg text-gray-600">
+              {/* <p className="text-lg text-gray-600">
                 <span className="font-semibold">Prerequisites:</span>{" "}
                 {goal.requirements ? goal.requirements : "--"}
-              </p>         
+              </p>          */}
               <p className="text-lg text-gray-600">
                 <span className="font-semibold">Deadline:</span> 
                 {goal.deadline ? format(new Date(goal.deadline), 'PPP') : " --"}
               </p>      
               <p className="text-lg text-gray-600">
-                  <span className="font-semibold">Importance:</span>{" "}
+                  <span className="font-semibold">Priority:</span>{" "}
                   {goal.importance}
               </p>
             </div>

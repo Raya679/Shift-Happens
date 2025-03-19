@@ -24,7 +24,7 @@ const getGoal = async (req, res) => {
 };
 
 const createGoal = async (req, res) => {
-  const { activities, duration, requirements, deadline, importance} = req.body;
+  const { activities, duration, deadline, importance} = req.body;
 
   let emptyFields = [];
 
@@ -60,7 +60,7 @@ const createGoal = async (req, res) => {
     const goal = await Goals.create({
       activities,
       duration,
-      requirements: requirements || null,
+      // requirements: requirements || null,
       deadline: deadline || null,
       importance,
       user_id,

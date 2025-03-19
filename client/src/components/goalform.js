@@ -8,7 +8,7 @@ const GoalForm = () => {
 
   const [activities, setActivities] = useState("");
   const [duration, setDuration] = useState("");
-  const [requirements, setRequirements] = useState("");
+  // const [requirements, setRequirements] = useState("");
   const [error, setError] = useState(null);
   const [deadline, setDeadline] = useState("");
   const [importance, setImportance] = useState("");
@@ -22,7 +22,7 @@ const GoalForm = () => {
       return;
     }
     const formattedDeadline = deadline ? new Date(deadline).toISOString() : null;
-    const goal = {activities, duration, requirements, deadline: formattedDeadline, importance};
+    const goal = {activities, duration, deadline: formattedDeadline, importance};
 
     const response = await fetch("/api/goals/add", {
       method: "POST",
@@ -45,7 +45,7 @@ const GoalForm = () => {
       setError(null);
       setActivities("");
       setDuration("");
-      setRequirements("");
+      // setRequirements("");
       setDeadline("");
       setImportance("");
       dispatch({ type: "CREATE_GOALS", payload: json });
@@ -58,6 +58,7 @@ const GoalForm = () => {
         <div>
           <label htmlFor="activityName" className="text-gray-700 font-semibold text-xl">
             Activity Name:
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -76,6 +77,7 @@ const GoalForm = () => {
         <div>
           <label htmlFor="duration" className="text-gray-700 font-semibold text-xl">
             Duration (in mins):
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -91,7 +93,7 @@ const GoalForm = () => {
           />
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor="prerequisite" className="text-gray-700 font-semibold text-xl">
             Prerequisite:
           </label>
@@ -107,7 +109,7 @@ const GoalForm = () => {
             }`}
             placeholder="Enter prerequisites"
           />
-        </div>
+        </div> */}
 
         <div>
         <label htmlFor="deadline" className="text-gray-700 font-semibold text-xl">Deadline:</label>
@@ -126,7 +128,9 @@ const GoalForm = () => {
         </div>
 
         <div>
-          <label htmlFor="importance" className="text-gray-700 font-semibold text-xl">Importance:</label>
+          <label htmlFor="importance" className="text-gray-700 font-semibold text-xl">Priority:
+          <span className="text-red-500">*</span>
+          </label>
           <select
             // type="number"
             // id="importance"

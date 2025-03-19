@@ -14,9 +14,9 @@ const goalSchema = new Schema(
       required: true,
     },
 
-    requirements: {
-      type: String,
-    },
+    // requirements: {
+    //   type: String,
+    // },
 
     deadline: {  
       type: Date,
